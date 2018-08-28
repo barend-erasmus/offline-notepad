@@ -17,13 +17,13 @@ Offline-first Notepad ++ with built in syncing
 * ![](docs/images/not-implemented.svg) Modify Tab Names
 * ![](docs/images/not-implemented.svg) Export / Download
 * ![](docs/images/implemented.svg) Offline Caching using Service Worker
-* ![](docs/images/not-implemented.svg) Syncing using Google ID
+* ![](docs/images/not-implemented.svg) Sync using Google ID
 * ![](docs/images/not-implemented.svg) Line Numbers
 
 ## Release History
 
 * 0.1.1 (2018-08-28)
-    * Intial Release
+    * Initial Release
 
 ## Contributors
 

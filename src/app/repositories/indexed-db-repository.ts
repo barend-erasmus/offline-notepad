@@ -1,9 +1,14 @@
+import { Injectable } from '@angular/core';
 import idb, { UpgradeDB, ObjectStore, Transaction, DB } from 'idb';
+import { BaseRepository } from './base';
 
-export class Repository {
-  protected static tabs: {} = {
-      'README': 'Hello World',
-  };
+@Injectable()
+export class IndexedDBRepository extends BaseRepository {
+  protected objectStore: ObjectStore<any, any> = null;
+
+  constructor() {
+    super();
+  }
 
   public async deleteTab(name: string): Promise<void> {
     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
@@ -17,7 +22,7 @@ export class Repository {
     const tab: { content: string; id: string } = await objectStore.get(name);
 
     if (!tab) {
-        return null;
+      return null;
     }
 
     return tab.content;
@@ -27,8 +32,8 @@ export class Repository {
     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 
     objectStore.add({
-        content,
-        id: name,
+      content,
+      id: name,
     });
   }
 
@@ -44,12 +49,16 @@ export class Repository {
     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 
     objectStore.put({
-        content,
-        id: name,
+      content,
+      id: name,
     });
   }
 
   protected async getObjectStore(): Promise<ObjectStore<any, any>> {
+    if (this.objectStore) {
+      return this.objectStore;
+    }
+
     const database: DB = await idb.open('offline-notepad', 1, (upgradeDB: UpgradeDB) => {
       upgradeDB.createObjectStore('tabs', { keyPath: 'id' });
     });
@@ -58,6 +67,8 @@ export class Repository {
 
     const objectStore: ObjectStore<any, any> = transaction.objectStore('tabs');
 
-    return objectStore;
+    this.objectStore = objectStore;
+
+    return  this.objectStore;
   }
 }

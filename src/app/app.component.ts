@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Repository } from './repository';
+import { BaseRepository } from './repositories/base';
 
 @Component({
   selector: 'app-root',
@@ -9,13 +9,12 @@ import { Repository } from './repository';
 export class AppComponent implements OnInit {
   public content: string = null;
 
-  public repository: Repository = new Repository();
-
   public selectedTabIndex: number = null;
 
   public tabs: string[] = null;
 
-  constructor() {}
+  constructor(protected repository: BaseRepository) {
+  }
 
   public async ngOnInit(): Promise<void> {
     this.tabs = await this.repository.listTabNames();
@@ -85,6 +84,8 @@ export class AppComponent implements OnInit {
     this.selectedTabIndex = index;
 
     this.updateTabContent();
+
+    (window as any).gtag('event', 'tab_open');
   }
 
   protected addNewTab(content: string): void {
