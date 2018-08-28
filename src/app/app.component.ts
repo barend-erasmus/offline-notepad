@@ -31,6 +31,11 @@ export class AppComponent implements OnInit {
     }
 
     this.updateTabContent();
+
+    (window as any).gtag('event', 'open', {
+      selectedTabIndex: this.selectedTabIndex,
+      tabs: this.tabs,
+    });
   }
 
   public async onChangeContent(): Promise<void> {

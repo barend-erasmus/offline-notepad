@@ -1,6 +1,16 @@
-<ul>
-  <li *ngFor="let tab of tabs; let index = index" (click)="onClickTab(index)">{{ tab }} <a (click)="onClickCloseTab(index)" href="#">Close</a></li>
-  <li (click)="onClickNewTab()">New Tab</li>
-</ul>
+<div class="layout">
+  <div class="tabs">
+    <ul>
+      <li *ngFor="let tab of tabs; let index = index" class="{{ selectedTabIndex === index ? 'saved active' : ''}}"><a (click)="onClickTab(index)">{{
+          tab }}</a><button (click)="onClickCloseTab(index)" class="close"></button></li>
 
-<textarea [(ngModel)]="content" (keyup)="onChangeContent()" rows="10" cols="40"></textarea>
+      <li (click)="onClickNewTab()" class="active"><a>NEW</a></li>
+    </ul>
+  </div>
+  <div class="contents">
+    <textarea [(ngModel)]="content" (keyup)="onChangeContent()"></textarea>
+  </div>
+  <div class="status-bar">
+
+  </div>
+</div>

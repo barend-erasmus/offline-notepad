@@ -1,1 +1,182 @@
-/* You can add global styles to this file, and also import other style files */
+// @import 'theme.scss';
+
+$tabs-bgcolor: #f0f0f0;
+
+$active-tab-bgcolor: #fff;
+$active-tab-text-color: #000;
+$active-tab-unsaved-icon-color: #e22c2c;
+$active-tab-saved-icon-color: #4e7ab9;
+$active-tab-close-icon-color: #af687c;
+
+$inactive-tab-bgcolor: #ccc;
+$inactive-tab-text-color: #777;
+$inactive-tab-unsaved-icon-color: #7a6494;
+$inactive-tab-saved-icon-color: #3d8ede;
+$inactive-tab-close-icon-color: #969696;
+
+$close-icon-hover-color: #e22c2c;
+
+$status-bar-bgcolor: #f0f0f0;
+
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    font: 12px/15px sans-serif;
+    height: 100%;
+    margin: 0;
+}
+
+div.layout {
+    height: 100%;
+    min-height: 100%;
+	display: flex;
+	flex-direction: column;
+
+    > div {
+        display: flex;
+        flex-direction: column;
+
+        &.contents {
+            flex: 1;
+        }
+    }
+}
+
+div.tabs ul {
+    background-color: $tabs-bgcolor;
+    list-style: none;
+    margin: 0;
+    padding: 5px;
+    width: 100%;
+    z-index: 1;
+
+    &:after {
+        clear: both;
+        content: '';
+        display: table;
+    }
+
+    li {
+        display: block;
+        float: left;
+        position: relative;
+
+        &.unsaved a:before {
+            color: $inactive-tab-unsaved-icon-color;
+        }
+        
+        &.active {
+            a {
+                background-color: $active-tab-bgcolor;
+                color: $active-tab-text-color;
+            }
+
+            button.close {
+                background-color: $active-tab-close-icon-color;
+                color: #fff;
+            }
+
+            &.saved a:before {
+                color: $active-tab-saved-icon-color;
+            }
+
+            &.unsaved a:before {
+                color: $active-tab-unsaved-icon-color;
+            }
+        }
+
+        a {
+            background-color: $inactive-tab-bgcolor;
+            border-radius: 2px;
+            box-shadow: 1px 1px 1px 0px rgba(0,0,0, 0.5);
+            color: $inactive-tab-text-color;
+            cursor: pointer;
+            display: block;
+            margin-right: 3px;
+            padding: 7px 22px 5px 22px;
+            position: relative;
+
+            &:before {
+                color: $inactive-tab-saved-icon-color;
+                content: '\f0c7';
+                font-family: 'Font Awesome 5 Free';
+                font-size: 14px;
+                font-weight: 700;
+                position: absolute;
+                    top: 5px;
+                    left: 5px;
+            }
+
+            &:hover {
+                color: darken($inactive-tab-text-color, 20%);
+            }
+        }
+
+        button.close {
+            background-color: $inactive-tab-close-icon-color;
+            border: 0;
+            border-radius: 2px;
+            color: #d9d9d9;
+            cursor: pointer;
+            height: 12px;
+            line-height: 12px;
+            padding: 0;
+            position: absolute;
+                top: 7px;
+                right: 7px;
+            width: 12px;
+            z-index: 2;
+
+            &:focus {
+                outline: 0;
+            }
+
+            &:after {
+                content: '\f00d';
+                font-family: 'Font Awesome 5 Free';
+                font-size: 11px;
+                font-weight: 700;
+            }
+
+            &:hover {
+                background-color: $close-icon-hover-color;
+                color: #fff;
+            }
+        }
+    }
+}
+
+div.contents {
+    background-color: #fff;
+    margin-top: -7px;
+    padding: 2px;
+    width: 100%;
+    z-index: 2;
+
+    textarea {
+        background-color: #fff;
+        font: 12px/18px "Courier New", sans-serif;
+        height: 100%;
+        resize: none;
+        width: 100%;
+
+        &:focus {
+            outline: 0;
+        }
+    }
+}
+
+div.status-bar {
+    background-color: $status-bar-bgcolor;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 5px;
+    width: 100%;
+}
