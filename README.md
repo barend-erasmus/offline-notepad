@@ -1,2 +1,2 @@
-# offline-notepad-pp
+# Offline Notepad++
 Offline-first Notepad ++ with built in syncing

@@ -1,0 +1,6 @@
+<ul>
+  <li *ngFor="let tab of tabs; let index = index" (click)="onClickTab(index)">{{ tab }} <a (click)="onClickCloseTab(index)" href="#">Close</a></li>
+  <li (click)="onClickNewTab()">New Tab</li>
+</ul>
+
+<textarea [(ngModel)]="content" (keyup)="onChangeContent()" rows="10" cols="40"></textarea>
