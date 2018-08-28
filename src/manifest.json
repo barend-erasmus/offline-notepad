@@ -3,7 +3,7 @@
     "short_name": "Offline Notepad++",
     "start_url": "/public/index.html",
     "display": "standalone",
-    "background_color": "#fff",
+    "background_color": "#7dc56e",
     "icons": [{
       "src": "assets/logo_212x153.png",
       "sizes": "192x192",

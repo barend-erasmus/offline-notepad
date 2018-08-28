@@ -1,8 +1,10 @@
 <div class="layout">
   <div class="tabs">
     <ul>
-      <li *ngFor="let tab of tabs; let index = index" class="{{ selectedTabIndex === index ? 'saved active' : ''}}"><a (click)="onClickTab(index)">{{
-          tab }}</a><button (click)="onClickCloseTab(index)" class="close"></button></li>
+      <li *ngFor="let tab of tabs; let index = index" class="{{ selectedTabIndex === index ? 'saved active' : ''}}">
+        <a (click)="onClickTab(index)">{{ tab }}</a>
+        <button (click)="onClickCloseTab(index)" class="close"></button>
+      </li>
       <li (click)="onClickNewTab()" class="new"><a><i class="fas fa-plus"></i></a></li>
     </ul>
   </div>

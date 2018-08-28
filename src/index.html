@@ -11,19 +11,32 @@
 
   <link rel='manifest' href='manifest.json'>
 
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-    crossorigin="anonymous" />
+  <link rel="stylesheet" href="assets/css/font-awesome.min.css" />
 </head>
 
 <body>
   <app-root></app-root>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119440130-2"></script>
   <script>
+    /* GOOGLE ANALYTICS */
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'UA-119440130-2');
+
+    /* SERVICE WORKER */
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(function (registration) {
+
+        });
+
+      navigator.serviceWorker.ready.then(function (registration) {
+
+      });
+    }
   </script>
 </body>
 

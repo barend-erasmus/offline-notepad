@@ -3,7 +3,9 @@ Offline-first Notepad ++ with built in syncing
 
 ![](https://img.shields.io/badge/version-v0.1.0-brightgreen.svg?style=flat-square)
 
-[Live Demo](https://barend-erasmus.github.io/offline-notepad-pp/public/index.html)
+[View Live](https://barend-erasmus.github.io/offline-notepad-pp/public/index.html)
+
+![](docs/screenshot.png)
 
 ## Features
 
@@ -11,9 +13,10 @@ Offline-first Notepad ++ with built in syncing
 * ![](docs/images/implemented.svg) IndexedDB Persistent Layer
 * ![](docs/images/implemented.svg) Autosave
 * ![](docs/images/implemented.svg) Google Analytics
+* ![](docs/images/not-implemented.svg) Support IE/Edge
 * ![](docs/images/not-implemented.svg) Modify Tab Names
 * ![](docs/images/not-implemented.svg) Export / Download
-* ![](docs/images/not-implemented.svg) Offline Caching using Service Worker
+* ![](docs/images/implemented.svg) Offline Caching using Service Worker
 * ![](docs/images/not-implemented.svg) Syncing using Google ID
 * ![](docs/images/not-implemented.svg) Line Numbers
 
