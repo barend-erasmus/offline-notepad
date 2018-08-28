@@ -11,8 +11,8 @@ import { PouchDBRepository } from './repositories/pouch-db-repository';
   declarations: [AppComponent],
   imports: [BrowserModule, FormsModule],
   providers: [
-    { provide: BaseRepository, useClass: IndexedDBRepository },
-    // { provide: BaseRepository, useClass: PouchDBRepository },
+    // { provide: BaseRepository, useClass: IndexedDBRepository },
+    { provide: BaseRepository, useClass: PouchDBRepository },
   ],
   bootstrap: [AppComponent],
 })

@@ -9,7 +9,7 @@ export class PouchDBRepository extends BaseRepository {
 
   protected onChangesFn: () => void = null;
 
-  protected url = 'http://localhost:5984';
+  protected url = 'http://couchdb.offline-notepad.com:5984';
 
   constructor() {
     super();
