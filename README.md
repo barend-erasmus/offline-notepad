@@ -10,6 +10,7 @@ Offline-first Notepad ++ with built in syncing
 * ![](docs/images/implemented.svg) Multiple Tabs
 * ![](docs/images/implemented.svg) IndexedDB Persistent Layer
 * ![](docs/images/implemented.svg) Autosave
+* ![](docs/images/not-implemented.svg) Google Analytics
 * ![](docs/images/not-implemented.svg) Export / Download
 * ![](docs/images/not-implemented.svg) Offline Caching using Service Worker
 * ![](docs/images/not-implemented.svg) Syncing using Google ID
@@ -17,7 +18,7 @@ Offline-first Notepad ++ with built in syncing
 
 ## Release History
 
-* 0.1.1 (2018-08-29)
+* 0.1.1 (2018-08-28)
     * Intial Release
 
 ## Contributors
