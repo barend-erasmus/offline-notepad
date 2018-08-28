@@ -5,9 +5,9 @@ Offline-first Notepad ++ with built in syncing
 
 ## Features
 
-* Multiple Tabs
-* IndexedDB Persistent Layer
-* Autosave
-* Export / Download
+* ![](docs/images/implemented.svg) Multiple Tabs
+* ![](docs/images/implemented.svg) IndexedDB Persistent Layer
+* ![](docs/images/implemented.svg) Autosave
+* ![](docs/images/not-implemented.svg) Export / Download
 
 ## Contribute
