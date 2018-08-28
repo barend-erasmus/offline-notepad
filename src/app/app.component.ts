@@ -21,7 +21,15 @@ export class AppComponent implements OnInit {
     this.tabs = await this.repository.listTabNames();
 
     if (this.tabs.length === 0) {
-      this.addNewTab();
+      this.addNewTab([
+        'Welcome to Offline Notepad ++',
+        '',
+        'Contributors',
+        '    Barend Erasmus',
+        '    Stuart Green',
+        '',
+        'Visit us on GitHub (https://github.com/barend-erasmus/offline-notepad-pp)'
+      ].join('\r\n'));
 
       this.tabs = await this.repository.listTabNames();
 
@@ -43,6 +51,10 @@ export class AppComponent implements OnInit {
   }
 
   public async onClickCloseTab(index: number): Promise<void> {
+    if (this.tabs.length === 1) {
+      return;
+    }
+
     this.repository.deleteTab(this.tabs[index]);
 
     this.tabs = await this.repository.listTabNames();
@@ -50,14 +62,23 @@ export class AppComponent implements OnInit {
     this.selectedTabIndex = 0;
 
     this.updateTabContent();
+
+
+    (window as any).gtag('event', 'tab_close', {
+      index,
+    });
   }
 
   public async onClickNewTab(): Promise<void> {
-    this.addNewTab();
+    this.addNewTab(null);
 
     this.tabs = await this.repository.listTabNames();
 
     this.selectedTabIndex = this.tabs.length - 1;
+
+    this.updateTabContent();
+
+    (window as any).gtag('event', 'tab_open');
   }
 
   public onClickTab(index: number): void {
@@ -66,8 +87,8 @@ export class AppComponent implements OnInit {
     this.updateTabContent();
   }
 
-  protected addNewTab(): void {
-    let index = 0;
+  protected addNewTab(content: string): void {
+    let index = 1;
 
     let name = `new ${index}`;
 
@@ -77,7 +98,9 @@ export class AppComponent implements OnInit {
       name = `new ${index}`;
     }
 
-    this.repository.insertTab(name, null);
+    this.repository.insertTab(name, content);
+
+    (window as any).gtag('event', 'tab_new');
   }
 
   protected async updateTabContent(): Promise<void> {

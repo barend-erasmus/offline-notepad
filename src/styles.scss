@@ -1,6 +1,7 @@
-// @import 'theme.scss';
-
+$link-color: #3d8ede;
 $tabs-bgcolor: #f0f0f0;
+$status-bar-bgcolor: #f0f0f0;
+$close-icon-hover-color: #e22c2c;
 
 $active-tab-bgcolor: #fff;
 $active-tab-text-color: #000;
@@ -13,10 +14,6 @@ $inactive-tab-text-color: #777;
 $inactive-tab-unsaved-icon-color: #7a6494;
 $inactive-tab-saved-icon-color: #3d8ede;
 $inactive-tab-close-icon-color: #969696;
-
-$close-icon-hover-color: #e22c2c;
-
-$status-bar-bgcolor: #f0f0f0;
 
 
 * {
@@ -33,6 +30,14 @@ body {
     margin: 0;
 }
 
+a {
+    color: $link-color;
+
+    &:hover {
+        color: darken($link-color, 20%);
+    }
+}
+
 div.layout {
     height: 100%;
     min-height: 100%;
@@ -41,7 +46,6 @@ div.layout {
 
     > div {
         display: flex;
-        flex-direction: column;
 
         &.contents {
             flex: 1;
@@ -150,6 +154,16 @@ div.tabs ul {
                 color: #fff;
             }
         }
+
+        &.new a {
+            background-color: $active-tab-bgcolor;
+            font-size: 10px;
+            padding: 6px 9px 6px 8px;
+
+            &:before {
+                display: none;
+            }
+        }
     }
 }
 
@@ -164,6 +178,7 @@ div.contents {
         background-color: #fff;
         font: 12px/18px "Courier New", sans-serif;
         height: 100%;
+        padding: 4px 6px;
         resize: none;
         width: 100%;
 
