@@ -9,5 +9,7 @@ export abstract class BaseRepository {
 
   public abstract listTabNames(): Promise<Array<string>>;
 
+  public abstract onChanges(fn: () => Promise<void>): void;
+
   public abstract updateTab(name: string, content: string): Promise<void>;
 }

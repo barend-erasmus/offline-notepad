@@ -10,7 +10,10 @@ import { PouchDBRepository } from './repositories/pouch-db-repository';
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, FormsModule],
-  providers: [{ provide: BaseRepository, useClass: PouchDBRepository }],
+  providers: [
+    { provide: BaseRepository, useClass: IndexedDBRepository },
+    // { provide: BaseRepository, useClass: PouchDBRepository },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

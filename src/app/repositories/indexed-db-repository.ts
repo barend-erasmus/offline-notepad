@@ -45,6 +45,10 @@ export class IndexedDBRepository extends BaseRepository {
     return tabs.map((tab) => tab.id);
   }
 
+  public onChanges(fn: () => Promise<void>): void {
+
+  }
+
   public async updateTab(name: string, content: string): Promise<void> {
     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 

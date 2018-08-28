@@ -13,22 +13,31 @@ export class AppComponent implements OnInit {
 
   public tabs: string[] = null;
 
+  protected timer: any = null;
+
   constructor(protected repository: BaseRepository) {
+    this.repository.onChanges(async () => {
+      this.tabs = await this.repository.listTabNames();
+
+      await this.updateTabContent();
+    });
   }
 
   public async ngOnInit(): Promise<void> {
     this.tabs = await this.repository.listTabNames();
 
     if (this.tabs.length === 0) {
-      this.addNewTab([
-        'Welcome to Offline Notepad ++',
-        '',
-        'Contributors',
-        '    Barend Erasmus',
-        '    Stuart Green',
-        '',
-        'Visit us on GitHub (https://github.com/barend-erasmus/offline-notepad)'
-      ].join('\r\n'));
+      await this.addNewTab(
+        [
+          'Welcome to Offline Notepad ++',
+          '',
+          'Contributors',
+          '    Barend Erasmus',
+          '    Stuart Green',
+          '',
+          'Visit us on GitHub (https://github.com/barend-erasmus/offline-notepad)',
+        ].join('\r\n'),
+      );
 
       this.tabs = await this.repository.listTabNames();
 
@@ -37,7 +46,7 @@ export class AppComponent implements OnInit {
       this.selectedTabIndex = 0;
     }
 
-    this.updateTabContent();
+    await this.updateTabContent();
 
     (window as any).gtag('event', 'open', {
       selectedTabIndex: this.selectedTabIndex,
@@ -46,7 +55,15 @@ export class AppComponent implements OnInit {
   }
 
   public async onChangeContent(): Promise<void> {
-    await this.repository.updateTab(this.tabs[this.selectedTabIndex], this.content);
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    this.timer = setTimeout(async () => {
+      this.timer = null;
+
+      await this.repository.updateTab(this.tabs[this.selectedTabIndex], this.content);
+    }, 2000);
   }
 
   public async onClickCloseTab(index: number): Promise<void> {
@@ -54,14 +71,13 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    this.repository.deleteTab(this.tabs[index]);
+    await this.repository.deleteTab(this.tabs[index]);
 
     this.tabs = await this.repository.listTabNames();
 
     this.selectedTabIndex = 0;
 
-    this.updateTabContent();
-
+    await this.updateTabContent();
 
     (window as any).gtag('event', 'tab_close', {
       index,
@@ -69,26 +85,26 @@ export class AppComponent implements OnInit {
   }
 
   public async onClickNewTab(): Promise<void> {
-    this.addNewTab(null);
+    await this.addNewTab(null);
 
     this.tabs = await this.repository.listTabNames();
 
     this.selectedTabIndex = this.tabs.length - 1;
 
-    this.updateTabContent();
+    await this.updateTabContent();
 
     (window as any).gtag('event', 'tab_open');
   }
 
-  public onClickTab(index: number): void {
+  public async onClickTab(index: number): Promise<void> {
     this.selectedTabIndex = index;
 
-    this.updateTabContent();
+    await this.updateTabContent();
 
     (window as any).gtag('event', 'tab_open');
   }
 
-  protected addNewTab(content: string): void {
+  protected async addNewTab(content: string): Promise<void> {
     let index = 1;
 
     let name = `new ${index}`;
@@ -99,7 +115,7 @@ export class AppComponent implements OnInit {
       name = `new ${index}`;
     }
 
-    this.repository.insertTab(name, content);
+    await this.repository.insertTab(name, content);
 
     (window as any).gtag('event', 'tab_new');
   }
