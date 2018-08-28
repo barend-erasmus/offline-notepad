@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "offline-notepad-pp": {
+    "offline-notepad": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -52,18 +52,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "offline-notepad-pp:build"
+            "browserTarget": "offline-notepad:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "offline-notepad-pp:build:production"
+              "browserTarget": "offline-notepad:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "offline-notepad-pp:build"
+            "browserTarget": "offline-notepad:build"
           }
         },
         "test": {
@@ -97,7 +97,7 @@
         }
       }
     },
-    "offline-notepad-pp-e2e": {
+    "offline-notepad-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -105,11 +105,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "offline-notepad-pp:serve"
+            "devServerTarget": "offline-notepad:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "offline-notepad-pp:serve:production"
+              "devServerTarget": "offline-notepad:serve:production"
             }
           }
         },
@@ -125,5 +125,5 @@
       }
     }
   },
-  "defaultProject": "offline-notepad-pp"
+  "defaultProject": "offline-notepad"
 }

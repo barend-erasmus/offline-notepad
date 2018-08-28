@@ -1,5 +1,5 @@
 const version = '0.1.1';
-const cacheName = `offline-notepad-pp-${version}`;
+const cacheName = `offline-notepad-${version}`;
 
 self.addEventListener('install', e => {
   e.waitUntil(

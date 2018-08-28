@@ -32,7 +32,7 @@ Offline-first Notepad ++ with built in syncing
 
 ## Contribute
 
-1. [Fork it](https://github.com/barend-erasmus/offline-notepad-pp/fork)
+1. [Fork it](https://github.com/barend-erasmus/offline-notepad/fork)
 2. Create your feature branch (`git checkout -b feature/your-feature`)
 3. Commit your changes (`git commit -am 'Description of your feautre'`)
 4. Push to the branch (`git push origin feature/your-feature`)

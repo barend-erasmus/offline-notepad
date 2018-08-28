@@ -50,7 +50,7 @@ export class Repository {
   }
 
   protected async getObjectStore(): Promise<ObjectStore<any, any>> {
-    const database: DB = await idb.open('offline-notepad-pp', 1, (upgradeDB: UpgradeDB) => {
+    const database: DB = await idb.open('offline-notepad', 1, (upgradeDB: UpgradeDB) => {
       upgradeDB.createObjectStore('tabs', { keyPath: 'id' });
     });
 

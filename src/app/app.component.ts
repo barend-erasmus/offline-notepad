@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
         '    Barend Erasmus',
         '    Stuart Green',
         '',
-        'Visit us on GitHub (https://github.com/barend-erasmus/offline-notepad-pp)'
+        'Visit us on GitHub (https://github.com/barend-erasmus/offline-notepad)'
       ].join('\r\n'));
 
       this.tabs = await this.repository.listTabNames();

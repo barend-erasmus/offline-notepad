@@ -1,10 +1,10 @@
 {
-  "name": "offline-notepad-pp",
+  "name": "offline-notepad",
   "version": "0.1.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --aot --base-href=\"https://barend-erasmus.github.io/offline-notepad-pp/public/\" --deploy-url=\"https://barend-erasmus.github.io/offline-notepad-pp/public/\" --output-hashing=none",
+    "build": "ng build --prod --aot --base-href=\"https://barend-erasmus.github.io/offline-notepad/public/\" --deploy-url=\"https://barend-erasmus.github.io/offline-notepad/public/\" --output-hashing=none",
     "build-prod": "ng build --prod --aot --base-href=\"https://offline-notepad.com/\" --deploy-url=\"https://offline-notepad.com/\" --output-hashing=none",
     "test": "ng test",
     "lint": "ng lint",

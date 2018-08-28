@@ -1,6 +1,6 @@
 {
-    "name": "Offline Notepad++",
-    "short_name": "Offline Notepad++",
+    "name": "Offline Notepad",
+    "short_name": "Offline Notepad",
     "start_url": "/index.html",
     "display": "standalone",
     "background_color": "#7dc56e",
