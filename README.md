@@ -1,7 +1,7 @@
 # Offline Notepad
 Offline-first Notepad ++ with built in syncing
 
-![](https://img.shields.io/badge/version-v0.1.3-brightgreen.svg?style=flat-square)
+![](https://img.shields.io/badge/version-v0.1.4-brightgreen.svg?style=flat-square)
 
 [View Live](https://offline-notepad.com/index.html)
 
@@ -17,7 +17,7 @@ Offline-first Notepad ++ with built in syncing
 * ![](docs/images/not-implemented.svg) Modify Tab Names
 * ![](docs/images/not-implemented.svg) Export / Download
 * ![](docs/images/implemented.svg) Offline Caching using Service Worker
-* ![](docs/images/not-implemented.svg) Sync using Google ID
+* ![](docs/images/implemented.svg) Sync using GoogleAuth
 * ![](docs/images/not-implemented.svg) Line Numbers
 
 ## Release History
@@ -26,6 +26,10 @@ Offline-first Notepad ++ with built in syncing
     * Initial Release
 * 0.1.3 (2018-08-29)
     * CHANGE: IndexedDB to PouchDB backed by CouchDB
+* 0.1.4 (2018-08-30)
+    * CHANGE: Sync using GoogleAuth
+* 0.1.5 (2018-08-31)
+    * CHANGE: Support IE/Edge
 
 ## Contributors
 
