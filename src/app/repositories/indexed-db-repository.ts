@@ -4,8 +4,6 @@ import { BaseRepository } from './base';
 
 @Injectable()
 export class IndexedDBRepository extends BaseRepository {
-  protected objectStore: ObjectStore<any, any> = null;
-
   constructor() {
     super();
   }
@@ -45,9 +43,7 @@ export class IndexedDBRepository extends BaseRepository {
     return tabs.map((tab) => tab.id);
   }
 
-  public onChanges(fn: () => Promise<void>): void {
-
-  }
+  public onChanges(fn: () => Promise<void>): void {}
 
   public async updateTab(name: string, content: string): Promise<void> {
     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
@@ -59,10 +55,6 @@ export class IndexedDBRepository extends BaseRepository {
   }
 
   protected async getObjectStore(): Promise<ObjectStore<any, any>> {
-    if (this.objectStore) {
-      return this.objectStore;
-    }
-
     const database: DB = await idb.open('offline-notepad', 1, (upgradeDB: UpgradeDB) => {
       upgradeDB.createObjectStore('tabs', { keyPath: 'id' });
     });
@@ -71,8 +63,6 @@ export class IndexedDBRepository extends BaseRepository {
 
     const objectStore: ObjectStore<any, any> = transaction.objectStore('tabs');
 
-    this.objectStore = objectStore;
-
-    return  this.objectStore;
+    return objectStore;
   }
 }
