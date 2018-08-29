@@ -1,4 +1,7 @@
 <div class="layout">
+  <button (click)="onClickSignIn()">Sign In</button>
+  <button (click)="onClickSignOut()">Sign Out</button>
+  <label>{{ user }}</label>
   <div class="tabs">
     <ul>
       <li *ngFor="let tab of tabs; let index = index" class="{{ selectedTabIndex === index ? 'saved active' : ''}}">

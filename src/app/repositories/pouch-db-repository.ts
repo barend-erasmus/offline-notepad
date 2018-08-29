@@ -9,6 +9,8 @@ export class PouchDBRepository extends BaseRepository {
 
   protected onChangesFn: () => void = null;
 
+  protected syncHandler: any = null;
+
   protected url = 'https://couchdb.offline-notepad.com';
 
   constructor() {
@@ -22,32 +24,7 @@ export class PouchDBRepository extends BaseRepository {
       localStorage.setItem('account', this.account);
     }
 
-    this.database = new (window as any).PouchDB('offline-notepad', { auto_compaction: true });
-
-    (window as any).PouchDB.sync('offline-notepad', `${this.url}/offline-notepad`, {
-      live: true,
-      retry: true,
-      pull: {
-        filter: (document: any) => {
-          return document.account === this.account;
-        },
-      },
-      push: {
-        filter: (document: any) => {
-          return document.account === this.account;
-        },
-      },
-    })
-      .on('change', (info: any) => {
-        if (this.onChangesFn && info.direction === 'pull') {
-          this.onChangesFn();
-        }
-      })
-      .on('paused', (error: Error) => {})
-      .on('active', () => {})
-      .on('denied', (error: Error) => {})
-      .on('complete', (info: any) => {})
-      .on('error', (error: Error) => {});
+    this.initialize();
   }
 
   public async deleteTab(name: string): Promise<void> {
@@ -84,11 +61,15 @@ export class PouchDBRepository extends BaseRepository {
       include_docs: true,
     });
 
-    return result.rows.map((row: any) => row.doc.name);
+    return result.rows.filter((row: any) => row.doc.account === this.account).map((row: any) => row.doc.name);
   }
 
   public onChanges(fn: () => Promise<void>): void {
     this.onChangesFn = fn;
+  }
+
+  public async setAccount(account: string): Promise<void> {
+    this.account = account;
   }
 
   public async updateTab(name: string, content: string): Promise<void> {
@@ -116,5 +97,38 @@ export class PouchDBRepository extends BaseRepository {
       const value: number = str === 'x' ? randomNumber : (randomNumber & 0x3) | 0x8;
       return value.toString(16);
     });
+  }
+
+  protected initialize(): void {
+    if (this.syncHandler) {
+      this.syncHandler.cancel();
+    }
+
+    this.database = new (window as any).PouchDB(`offline-notepad`, { auto_compaction: true });
+
+    this.syncHandler = (window as any).PouchDB.sync(`offline-notepad`, `${this.url}/offline-notepad`, {
+      live: true,
+      retry: true,
+      // pull: {
+      //   filter: (document: any) => {
+      //     return document.account === this.account;
+      //   },
+      // },
+      // push: {
+      //   filter: (document: any) => {
+      //     return document.account === this.account;
+      //   },
+      // },
+    })
+      .on('change', (info: any) => {
+        if (this.onChangesFn && info.change.docs.filter((doc: any) => doc.account === this.account).length > 0) {
+          this.onChangesFn();
+        }
+      })
+      .on('paused', (error: Error) => {})
+      .on('active', () => {})
+      .on('denied', (error: Error) => {})
+      .on('complete', (info: any) => {})
+      .on('error', (error: Error) => {});
   }
 }

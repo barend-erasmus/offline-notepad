@@ -11,5 +11,7 @@ export abstract class BaseRepository {
 
   public abstract onChanges(fn: () => Promise<void>): void;
 
+  public abstract setAccount(account: string): Promise<void>;
+
   public abstract updateTab(name: string, content: string): Promise<void>;
 }
