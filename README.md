@@ -1,5 +1,5 @@
 # Offline Notepad
-Offline-first Notepad ++ with built in syncing
+Offline-first Notepad with built in syncing
 
 ![](https://img.shields.io/badge/version-v0.1.4-brightgreen.svg?style=flat-square)
 
