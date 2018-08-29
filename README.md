@@ -1,7 +1,7 @@
 # Offline Notepad
 Offline-first Notepad ++ with built in syncing
 
-![](https://img.shields.io/badge/version-v0.1.2-brightgreen.svg?style=flat-square)
+![](https://img.shields.io/badge/version-v0.1.3-brightgreen.svg?style=flat-square)
 
 [View Live](https://offline-notepad.com/index.html)
 
@@ -24,6 +24,8 @@ Offline-first Notepad ++ with built in syncing
 
 * 0.1.1 (2018-08-28)
     * Initial Release
+* 0.1.3 (2018-08-29)
+    * CHANGE: IndexedDB to PouchDB backed by CouchDB
 
 ## Contributors
 
