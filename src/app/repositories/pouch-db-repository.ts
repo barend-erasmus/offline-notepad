@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseRepository } from './base';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class PouchDBRepository extends BaseRepository {
@@ -104,21 +105,13 @@ export class PouchDBRepository extends BaseRepository {
       this.syncHandler.cancel();
     }
 
-    this.database = new (window as any).PouchDB(`offline-notepad`, { auto_compaction: true });
+    const databaseName = `offline-notepad-${environment.version}`;
 
-    this.syncHandler = (window as any).PouchDB.sync(`offline-notepad`, `${this.url}/offline-notepad`, {
+    this.database = new (window as any).PouchDB(databaseName, { auto_compaction: true });
+
+    this.syncHandler = (window as any).PouchDB.sync(databaseName, `${this.url}/offline-notepad`, {
       live: true,
       retry: true,
-      // pull: {
-      //   filter: (document: any) => {
-      //     return document.account === this.account;
-      //   },
-      // },
-      // push: {
-      //   filter: (document: any) => {
-      //     return document.account === this.account;
-      //   },
-      // },
     })
       .on('change', (info: any) => {
         if (this.onChangesFn && info.change.docs.filter((doc: any) => doc.account === this.account).length > 0) {

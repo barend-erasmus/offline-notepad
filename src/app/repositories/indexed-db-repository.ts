@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import idb, { UpgradeDB, ObjectStore, Transaction, DB } from 'idb';
 import { BaseRepository } from './base';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class IndexedDBRepository extends BaseRepository {
@@ -57,7 +58,9 @@ export class IndexedDBRepository extends BaseRepository {
   public async setAccount(account: string): Promise<void> {}
 
   protected async getObjectStore(): Promise<ObjectStore<any, any>> {
-    const database: DB = await idb.open('offline-notepad', 1, (upgradeDB: UpgradeDB) => {
+    const databaseName = `offline-notepad-${environment.version}`;
+
+    const database: DB = await idb.open(databaseName, 1, (upgradeDB: UpgradeDB) => {
       upgradeDB.createObjectStore('tabs', { keyPath: 'id' });
     });
 
