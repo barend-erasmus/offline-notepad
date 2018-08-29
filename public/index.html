@@ -17,6 +17,8 @@
   <link rel='manifest' href='manifest.json'>
 
   <link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+
+  <script src="node_modules/pouchdb/dist/pouchdb.min.js"></script>
 <link rel="stylesheet" href="https://offline-notepad.com/styles.css"></head>
 
 <body>
@@ -31,7 +33,7 @@
     gtag('config', 'UA-119440130-2');
 
     /* SERVICE WORKER */
-    if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator && window.location.hostname !== 'localhost') {
       navigator.serviceWorker.register('sw.js')
         .then(function (registration) {
 
