@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseRepository } from './repositories/base';
 import { environment } from '../environments/environment';
+import { Tab } from './models/tab';
 
 @Component({
   selector: 'app-root',
@@ -8,11 +9,11 @@ import { environment } from '../environments/environment';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  public content: string = null;
+  public selectedTab: Tab = null;
 
-  public selectedTabIndex: number = null;
+  public isInEditMode = false;
 
-  public tabs: string[] = null;
+  public tabs: Array<Tab> = null;
 
   protected timer: any = null;
 
@@ -23,21 +24,18 @@ export class AppComponent implements OnInit {
       await this.refresh();
     });
 
-    this.selectedTabIndex = 0;
-
     this.initializeGoogleOAuth2();
   }
 
   public async ngOnInit(): Promise<void> {
     await this.refresh();
 
-    (window as any).gtag('event', 'open', {
-      selectedTabIndex: this.selectedTabIndex,
-      tabs: this.tabs,
-    });
+    (window as any).gtag('event', 'open');
   }
 
-  public async onChangeContent(): Promise<void> {
+  public async onChangeContent(tab: Tab): Promise<void> {
+    // TODO: Clone
+
     if (this.timer) {
       clearTimeout(this.timer);
     }
@@ -45,34 +43,24 @@ export class AppComponent implements OnInit {
     this.timer = setTimeout(async () => {
       this.timer = null;
 
-      await this.repository.updateTab(this.tabs[this.selectedTabIndex], this.content);
+      await this.repository.update(tab);
     }, 1200);
   }
 
-  public async onClickCloseTab(index: number): Promise<void> {
+  public async onClickCloseTab(tab: Tab): Promise<void> {
     if (this.tabs.length === 1) {
       return;
     }
 
-    await this.repository.deleteTab(this.tabs[index]);
-
-    this.tabs = await this.repository.listTabNames();
-
-    this.selectedTabIndex = 0;
+    await this.repository.delete(tab);
 
     await this.refresh();
 
-    (window as any).gtag('event', 'tab_close', {
-      index,
-    });
+    (window as any).gtag('event', 'tab_close');
   }
 
   public async onClickNewTab(): Promise<void> {
     await this.addNewTab(null);
-
-    this.tabs = await this.repository.listTabNames();
-
-    this.selectedTabIndex = this.tabs.length - 1;
 
     await this.refresh();
 
@@ -87,12 +75,24 @@ export class AppComponent implements OnInit {
     (window as any).gapi.auth2.getAuthInstance().signOut();
   }
 
-  public async onClickTab(index: number): Promise<void> {
-    this.selectedTabIndex = index;
+  public async onBlurTab(tab: Tab): Promise<void> {
+    this.isInEditMode = false;
+
+    await this.repository.update(tab);
+
+    await this.refresh();
+  }
+
+  public async onClickTab(tab: Tab): Promise<void> {
+    this.selectedTab = tab;
 
     await this.refresh();
 
     (window as any).gtag('event', 'tab_open');
+  }
+
+  public onDoubleClickTab(): void {
+    this.isInEditMode = true;
   }
 
   protected async addNewTab(content: string): Promise<void> {
@@ -100,13 +100,13 @@ export class AppComponent implements OnInit {
 
     let name = `new ${index}`;
 
-    while (this.tabs.indexOf(name) > -1) {
+    while (this.tabs.find((tab: Tab) => tab.name === name)) {
       index++;
 
       name = `new ${index}`;
     }
 
-    await this.repository.insertTab(name, content);
+    await this.repository.insert(new Tab(null, name, content));
 
     (window as any).gtag('event', 'tab_new');
   }
@@ -150,7 +150,7 @@ export class AppComponent implements OnInit {
 
   protected async refresh(): Promise<void> {
     // Refresh Tabs
-    this.tabs = await this.repository.listTabNames();
+    this.tabs = await this.repository.list();
 
     if (this.tabs.length === 0) {
       await this.addNewTab(
@@ -165,14 +165,15 @@ export class AppComponent implements OnInit {
         ].join('\r\n'),
       );
 
-      this.tabs = await this.repository.listTabNames();
-
-      this.selectedTabIndex = 0;
+      this.tabs = await this.repository.list();
     }
 
-    // Refresh Current Content
-    const name: string = this.tabs[this.selectedTabIndex];
+    if (this.selectedTab) {
+      this.selectedTab = this.tabs.find((tab: Tab) => tab.id === this.selectedTab.id);
+    }
 
-    this.content = await this.repository.getTabContent(name);
+    if (!this.selectedTab) {
+      this.selectedTab = this.tabs[0];
+    }
   }
 }

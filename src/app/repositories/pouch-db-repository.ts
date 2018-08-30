@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseRepository } from './base';
 import { environment } from '../../environments/environment';
+import { Tab } from '../models/tab';
 
 @Injectable()
 export class PouchDBRepository extends BaseRepository {
@@ -20,7 +21,7 @@ export class PouchDBRepository extends BaseRepository {
     this.account = localStorage.getItem('account');
 
     if (!this.account) {
-      this.account = this.generateAccountId();
+      this.account = this.genereateUUID();
 
       localStorage.setItem('account', this.account);
     }
@@ -28,41 +29,33 @@ export class PouchDBRepository extends BaseRepository {
     this.initialize();
   }
 
-  public async deleteTab(name: string): Promise<void> {
-    const document: any = await this.database.get(`${this.account}-${name}`);
+  public async delete(tab: Tab): Promise<void> {
+    const document: any = await this.database.get(tab.id);
 
     await this.database.remove(document);
   }
 
-  public async getTabContent(name: string): Promise<string> {
-    try {
-      const document: any = await this.database.get(`${this.account}-${name}`);
-
-      if (!document) {
-        return null;
-      }
-
-      return document.content;
-    } catch {
-      return null;
+  public async insert(tab: Tab): Promise<void> {
+    if (!tab.id) {
+      tab.id = this.genereateUUID();
     }
-  }
 
-  public async insertTab(name: string, content: string): Promise<void> {
     await this.database.put({
-      _id: `${this.account}-${name}`,
+      _id: tab.id,
       account: this.account,
-      content,
-      name,
+      content: tab.content,
+      name: tab.name,
     });
   }
 
-  public async listTabNames(): Promise<Array<string>> {
+  public async list(): Promise<Array<Tab>> {
     const result: any = await this.database.allDocs({
       include_docs: true,
     });
 
-    return result.rows.filter((row: any) => row.doc.account === this.account).map((row: any) => row.doc.name);
+    return result.rows
+      .filter((row: any) => row.doc.account === this.account)
+      .map((row: any) => new Tab(row.doc._id, row.doc.name, row.doc.content));
   }
 
   public onChanges(fn: () => Promise<void>): void {
@@ -73,30 +66,19 @@ export class PouchDBRepository extends BaseRepository {
     this.account = account;
   }
 
-  public async updateTab(name: string, content: string): Promise<void> {
-    const document: any = await this.database.get(`${this.account}-${name}`);
+  public async update(tab: Tab): Promise<void> {
+    const document: any = await this.database.get(tab.id);
 
     if (!document) {
       return null;
     }
 
     await this.database.put({
-      _id: `${this.account}-${name}`,
+      _id: tab.id,
       _rev: document._rev,
       account: this.account,
-      content,
-      name,
-    });
-  }
-
-  protected generateAccountId(): string {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (str) => {
-      // tslint:disable-next-line:no-bitwise
-      const randomNumber: number = (Math.random() * 16) | 0;
-
-      // tslint:disable-next-line:no-bitwise
-      const value: number = str === 'x' ? randomNumber : (randomNumber & 0x3) | 0x8;
-      return value.toString(16);
+      content: tab.content,
+      name: tab.name,
     });
   }
 

@@ -14,7 +14,7 @@ Offline-first Notepad with built in syncing
 * ![](docs/images/implemented.svg) Autosave
 * ![](docs/images/implemented.svg) Google Analytics
 * ![](docs/images/not-implemented.svg) Support IE/Edge
-* ![](docs/images/not-implemented.svg) Modify Tab Names
+* ![](docs/images/implemented.svg) Modify Tab Names
 * ![](docs/images/not-implemented.svg) Export / Download
 * ![](docs/images/implemented.svg) Offline Caching using Service Worker
 * ![](docs/images/implemented.svg) Sync using GoogleAuth

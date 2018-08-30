@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import idb, { UpgradeDB, ObjectStore, Transaction, DB } from 'idb';
 import { BaseRepository } from './base';
 import { environment } from '../../environments/environment';
+import { Tab } from '../models/tab';
 
 @Injectable()
 export class IndexedDBRepository extends BaseRepository {
@@ -9,50 +10,36 @@ export class IndexedDBRepository extends BaseRepository {
     super();
   }
 
-  public async deleteTab(name: string): Promise<void> {
+  public async delete(tab: Tab): Promise<void> {
     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 
-    await objectStore.delete(name);
+    await objectStore.delete(tab.id);
   }
 
-  public async getTabContent(name: string): Promise<string> {
-    const objectStore: ObjectStore<any, any> = await this.getObjectStore();
-
-    const tab: { content: string; id: string } = await objectStore.get(name);
-
-    if (!tab) {
-      return null;
+  public async insert(tab: Tab): Promise<void> {
+    if (!tab.id) {
+      tab.id = this.genereateUUID();
     }
 
-    return tab.content;
-  }
-
-  public async insertTab(name: string, content: string): Promise<void> {
     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 
-    objectStore.add({
-      content,
-      id: name,
-    });
+    objectStore.add(tab);
   }
 
-  public async listTabNames(): Promise<Array<string>> {
+  public async list(): Promise<Array<Tab>> {
     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 
-    const tabs: Array<{ content: string; id: string }> = await objectStore.getAll();
+    const tabs: Array<Tab> = await objectStore.getAll();
 
-    return tabs.map((tab) => tab.id);
+    return tabs;
   }
 
   public onChanges(fn: () => Promise<void>): void {}
 
-  public async updateTab(name: string, content: string): Promise<void> {
+  public async update(tab: Tab): Promise<void> {
     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 
-    objectStore.put({
-      content,
-      id: name,
-    });
+    objectStore.put(tab);
   }
 
   public async setAccount(account: string): Promise<void> {}

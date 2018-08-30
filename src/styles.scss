@@ -2,19 +2,19 @@ $link-color: #3d8ede;
 $tabs-bgcolor: #f0f0f0;
 $status-bar-bgcolor: #f0f0f0;
 $close-icon-hover-color: #e22c2c;
-
-$active-tab-bgcolor: #fff;
-$active-tab-text-color: #000;
-$active-tab-unsaved-icon-color: #e22c2c;
-$active-tab-saved-icon-color: #4e7ab9;
-$active-tab-close-icon-color: #af687c;
+$edit-underline-color: #4e7ab9;
 
 $inactive-tab-bgcolor: #ccc;
 $inactive-tab-text-color: #777;
-$inactive-tab-unsaved-icon-color: #7a6494;
-$inactive-tab-saved-icon-color: #3d8ede;
+$inactive-tab-file-icon-color: #4e7ab9;
 $inactive-tab-close-icon-color: #969696;
 
+$active-tab-bgcolor: #fff;
+$active-tab-text-color: #000;
+$active-tab-file-icon-color: #238ffa;
+$active-tab-close-icon-color: #af687c;
+
+$button-color: #238ffa;
 
 * {
     box-sizing: border-box;
@@ -53,11 +53,34 @@ div.layout {
     }
 }
 
+button {
+    background-color: $button-color;
+    border: 0;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    padding: 6px 8px 5px 9px;
+    position: absolute;
+        top: 4px;
+        right: 5px;
+    transition: background-color 0.15s ease-in-out;
+    z-index: 10;
+
+    i {
+        margin-left: 7px;
+    }
+
+    &:hover {
+        background-color: darken($button-color, 20%);
+    }
+}
+
 div.tabs ul {
     background-color: $tabs-bgcolor;
     list-style: none;
     margin: 0;
-    padding: 5px;
+    padding: 5px 90px 5px 5px;
     width: 100%;
     z-index: 1;
 
@@ -68,58 +91,71 @@ div.tabs ul {
     }
 
     li {
+        background-color: $inactive-tab-bgcolor;
+        border-radius: 2px;
+        box-shadow: 1px 1px 1px 0px rgba(0,0,0, 0.5);
+        color: $inactive-tab-text-color;
+        cursor: pointer;
         display: block;
         float: left;
+        margin: 0 3px 3px 0;
+        padding: 0 22px;
         position: relative;
 
-        &.unsaved a:before {
-            color: $inactive-tab-unsaved-icon-color;
+        &:before {
+            color: $inactive-tab-file-icon-color;
+            content: '\f15c';
+            font-family: 'Font Awesome 5 Free';
+            font-size: 14px;
+            font-weight: 700;
+            position: absolute;
+                top: 6px;
+                left: 6px;
+        }
+
+        &:hover {
+            color: darken($inactive-tab-text-color, 20%);
         }
         
         &.active {
-            a {
-                background-color: $active-tab-bgcolor;
-                color: $active-tab-text-color;
+            background-color: $active-tab-bgcolor;
+            color: $active-tab-text-color;
+            cursor: default;
+            
+            &:before {
+                color: $active-tab-file-icon-color;
+            }
+
+            label {
+                cursor: default;
             }
 
             button.close {
                 background-color: $active-tab-close-icon-color;
                 color: #fff;
             }
-
-            &.saved a:before {
-                color: $active-tab-saved-icon-color;
-            }
-
-            &.unsaved a:before {
-                color: $active-tab-unsaved-icon-color;
-            }
         }
 
-        a {
-            background-color: $inactive-tab-bgcolor;
-            border-radius: 2px;
-            box-shadow: 1px 1px 1px 0px rgba(0,0,0, 0.5);
-            color: $inactive-tab-text-color;
+        label {
+            display: inline-block;
             cursor: pointer;
-            display: block;
-            margin-right: 3px;
-            padding: 7px 22px 5px 22px;
+            line-height: 29px;
+        }
+
+        input {
+            background: transparent;
+            border: 0;
+            font: inherit;
+            height: 19px;
+            line-height: 19px;
+            margin: 5px 0;
+            max-width: 75px;
+            padding: 0;
             position: relative;
 
-            &:before {
-                color: $inactive-tab-saved-icon-color;
-                content: '\f0c7';
-                font-family: 'Font Awesome 5 Free';
-                font-size: 14px;
-                font-weight: 700;
-                position: absolute;
-                    top: 5px;
-                    left: 5px;
-            }
-
-            &:hover {
-                color: darken($inactive-tab-text-color, 20%);
+            &:focus {
+                border-bottom: 1px solid $edit-underline-color;
+                outline: 0;
             }
         }
 
@@ -133,8 +169,8 @@ div.tabs ul {
             line-height: 12px;
             padding: 0;
             position: absolute;
-                top: 7px;
-                right: 7px;
+                top: 8px;
+                right: 4px;
             width: 12px;
             z-index: 2;
 
@@ -154,11 +190,11 @@ div.tabs ul {
                 color: #fff;
             }
         }
-
-        &.new a {
+        
+        &.new {
             background-color: $active-tab-bgcolor;
             font-size: 10px;
-            padding: 6px 9px 6px 8px;
+            padding: 7px 9px 7px 8px;
 
             &:before {
                 display: none;
@@ -169,16 +205,16 @@ div.tabs ul {
 
 div.contents {
     background-color: #fff;
-    margin-top: -7px;
+    margin-top: -10px;
     padding: 2px;
     width: 100%;
     z-index: 2;
 
     textarea {
         background-color: #fff;
-        font: 12px/18px "Courier New", sans-serif;
+        font: 13px/18px "Consolas", "Courier New", sans-serif;
         height: 100%;
-        padding: 4px 6px;
+        padding: 5px 7px;
         resize: none;
         width: 100%;
 
