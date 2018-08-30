@@ -73,6 +73,8 @@ export class AppComponent implements OnInit {
 
   public onClickSignOut(): void {
     (window as any).gapi.auth2.getAuthInstance().signOut();
+
+    this.user = null;
   }
 
   public async onBlurTab(tab: Tab): Promise<void> {
