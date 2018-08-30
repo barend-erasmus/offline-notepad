@@ -27,6 +27,7 @@ Offline-first Notepad with built in syncing
 * 0.1.3 (2018-08-29)
     * CHANGE: IndexedDB to PouchDB backed by CouchDB
 * 0.1.4 (2018-08-30)
+    * CHANGE: Modify Tab Names
     * CHANGE: Sync using GoogleAuth
 * 0.1.5 (2018-08-31)
     * CHANGE: Support IE/Edge
