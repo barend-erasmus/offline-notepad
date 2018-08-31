@@ -1,7 +1,7 @@
 # Offline Notepad
 Offline-first Notepad with built in syncing
 
-![](https://img.shields.io/badge/version-v0.1.5-brightgreen.svg?style=flat-square)
+![](https://travis-ci.org/barend-erasmus/offline-notepad.svg?branch=master) ![](https://img.shields.io/badge/version-v0.1.5-brightgreen.svg?style=flat-square)
 
 [View Live](https://offline-notepad.com/index.html)
 
