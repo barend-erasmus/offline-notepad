@@ -42,6 +42,8 @@ export class IndexedDBRepository extends BaseRepository {
     objectStore.put(tab);
   }
 
+  public async resetAccount(): Promise<void> {}
+
   public async setAccount(account: string): Promise<void> {}
 
   protected async getObjectStore(): Promise<ObjectStore<any, any>> {

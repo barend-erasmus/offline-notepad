@@ -18,13 +18,7 @@ export class PouchDBRepository extends BaseRepository {
   constructor() {
     super();
 
-    this.account = localStorage.getItem('account');
-
-    if (!this.account) {
-      this.account = this.genereateUUID();
-
-      localStorage.setItem('account', this.account);
-    }
+    this.resetAccount();
 
     this.initialize();
   }
@@ -60,6 +54,16 @@ export class PouchDBRepository extends BaseRepository {
 
   public onChanges(fn: () => Promise<void>): void {
     this.onChangesFn = fn;
+  }
+
+  public async resetAccount(): Promise<void> {
+    this.account = localStorage.getItem('account');
+
+    if (!this.account) {
+      this.account = this.genereateUUID();
+
+      localStorage.setItem('account', this.account);
+    }
   }
 
   public async setAccount(account: string): Promise<void> {
