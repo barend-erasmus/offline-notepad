@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { BaseRepository } from './repositories/base';
 import { environment } from '../environments/environment';
 import { Tab } from './models/tab';
@@ -18,6 +18,9 @@ export class AppComponent implements OnInit {
   protected timer: any = null;
 
   public user: string = null;
+
+  @ViewChildren('tabInput')
+  public tabInputs: QueryList<ElementRef> = null;
 
   constructor(protected repository: BaseRepository) {
     this.repository.onChanges(async () => {
@@ -95,6 +98,11 @@ export class AppComponent implements OnInit {
 
   public onDoubleClickTab(): void {
     this.isInEditMode = true;
+
+    // TODO: Refactor
+    setTimeout(() => {
+      this.tabInputs.toArray()[0].nativeElement.focus();
+    }, 200);
   }
 
   protected async addNewTab(content: string): Promise<void> {

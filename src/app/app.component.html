@@ -1,11 +1,11 @@
 <div class="layout">
-  <div class="tabs">
+  <div class="tabs" onselectstart='return false;'>
     <button *ngIf="!user" (click)="onClickSignIn()" class="button">Sign in<i class="fas fa-sign-in-alt"></i></button>
     <button *ngIf="user" (click)="onClickSignOut()" class="button">Sign out<i class="fas fa-sign-out-alt"></i></button>
     <ul>
       <li *ngFor="let tab of tabs" class="{{ tab === selectedTab ? 'saved active' : ''}}">
         <label *ngIf="(tab === selectedTab && !isInEditMode) || (tab !== selectedTab)" (dblclick)="onDoubleClickTab(tab)" (click)="onClickTab(tab)">{{ tab.name }}</label>
-        <input *ngIf="tab === selectedTab && isInEditMode" [(ngModel)]="tab.name" (blur)="onBlurTab(tab)" type="text" />
+        <input *ngIf="tab === selectedTab && isInEditMode" [(ngModel)]="tab.name" (blur)="onBlurTab(tab)" #tabInput type="text" />
         <button (click)="onClickCloseTab(tab)" class="close"></button>
       </li>
       <li (click)="onClickNewTab()" class="new"><a><i class="fas fa-plus"></i></a></li>
