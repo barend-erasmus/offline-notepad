@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build --prod --aot --base-href=\"https://barend-erasmus.github.io/offline-notepad/public/\" --deploy-url=\"https://barend-erasmus.github.io/offline-notepad/public/\" --output-hashing=none",
     "build-prod": "ng build --prod --aot --base-href=\"https://offline-notepad.com/\" --deploy-url=\"https://offline-notepad.com/\" --output-hashing=none",
-    "test": "ng test --watch=false",
+    "test": "ng build --prod --aot --base-href=\"https://offline-notepad.com/\" --deploy-url=\"https://offline-notepad.com/\" --output-hashing=none",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
