@@ -1,7 +1,7 @@
 # Offline Notepad
 Offline-first Notepad with built in syncing
 
-![](https://img.shields.io/badge/version-v0.1.4-brightgreen.svg?style=flat-square)
+![](https://img.shields.io/badge/version-v0.1.5-brightgreen.svg?style=flat-square)
 
 [View Live](https://offline-notepad.com/index.html)
 
@@ -13,7 +13,7 @@ Offline-first Notepad with built in syncing
 * ![](docs/images/implemented.svg) IndexedDB Persistent Layer
 * ![](docs/images/implemented.svg) Autosave
 * ![](docs/images/implemented.svg) Google Analytics
-* ![](docs/images/not-implemented.svg) Support IE/Edge
+* ![](docs/images/implemented.svg) Support Edge
 * ![](docs/images/implemented.svg) Modify Tab Names
 * ![](docs/images/not-implemented.svg) Export / Download
 * ![](docs/images/implemented.svg) Offline Caching using Service Worker
@@ -30,7 +30,7 @@ Offline-first Notepad with built in syncing
     * CHANGE: Modify Tab Names
     * CHANGE: Sync using GoogleAuth
 * 0.1.5 (2018-08-31)
-    * CHANGE: Support IE/Edge
+    * CHANGE: Support Edge
 
 ## Contributors
 
