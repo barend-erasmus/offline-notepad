@@ -39,6 +39,7 @@ export class PouchDBRepository extends BaseRepository {
       account: this.account,
       content: tab.content,
       name: tab.name,
+      order: tab.order,
     });
   }
 
@@ -49,7 +50,7 @@ export class PouchDBRepository extends BaseRepository {
 
     return result.rows
       .filter((row: any) => row.doc.account === this.account)
-      .map((row: any) => new Tab(row.doc._id, row.doc.name, row.doc.content));
+      .map((row: any) => new Tab(row.doc._id, row.doc.name, row.doc.content, row.doc.order));
   }
 
   public onChanges(fn: () => Promise<void>): void {
@@ -83,6 +84,7 @@ export class PouchDBRepository extends BaseRepository {
       account: this.account,
       content: tab.content,
       name: tab.name,
+      order: tab.order,
     });
   }
 

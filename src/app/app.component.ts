@@ -30,11 +30,7 @@ export class AppComponent implements OnInit {
     this.initializeGoogleOAuth2();
   }
 
-  public async ngOnInit(): Promise<void> {
-    await this.refresh();
-
-    (window as any).gtag('event', 'open');
-  }
+  public async ngOnInit(): Promise<void> {}
 
   public async onChangeContent(tab: Tab): Promise<void> {
     // TODO: Clone
@@ -109,7 +105,33 @@ export class AppComponent implements OnInit {
     }, 200);
   }
 
+  public onDragStartTab(event: any): void {
+    // console.log(event);
+  }
+
+  public onDropTab(event: any): void {
+    console.log(event);
+  }
+
   protected async addNewTab(content: string): Promise<void> {
+    const name: string = this.getNewTabName();
+
+    await this.repository.insert(new Tab(null, name, content, this.getMaximumOrder() + 1));
+
+    (window as any).gtag('event', 'tab_new');
+  }
+
+  protected getMaximumOrder(): number {
+    const maximumOrder: number = Math.max(...this.tabs.map((tab: Tab) => tab.order));
+
+    if (!maximumOrder || isNaN(maximumOrder)) {
+      return 0;
+    }
+
+    return maximumOrder;
+  }
+
+  protected getNewTabName(): string {
     let index = 1;
 
     let name = `new ${index}`;
@@ -120,9 +142,7 @@ export class AppComponent implements OnInit {
       name = `new ${index}`;
     }
 
-    await this.repository.insert(new Tab(null, name, content));
-
-    (window as any).gtag('event', 'tab_new');
+    return name;
   }
 
   protected initializeGoogleOAuth2(): void {
@@ -157,6 +177,8 @@ export class AppComponent implements OnInit {
             this.repository.setAccount(`${userInfo.getId()}-${this.user}`);
 
             this.refresh();
+          } else {
+            this.refresh();
           }
         });
     });
@@ -167,19 +189,22 @@ export class AppComponent implements OnInit {
     this.tabs = await this.repository.list();
 
     if (this.tabs.length === 0) {
-      await this.addNewTab(
-        [
-          'Welcome to Offline Notepad',
-          '',
-          'Contributors',
-          '    Barend Erasmus',
-          '    Stuart Green',
-          '',
-          'Visit us on GitHub (https://github.com/barend-erasmus/offline-notepad)',
-        ].join('\r\n'),
+      this.tabs.push(
+        new Tab(
+          null,
+          this.getNewTabName(),
+          [
+            'Welcome to Offline Notepad',
+            '',
+            'Contributors',
+            '    Barend Erasmus',
+            '    Stuart Green',
+            '',
+            'Visit us on GitHub (https://github.com/barend-erasmus/offline-notepad)',
+          ].join('\r\n'),
+          this.getMaximumOrder() + 1,
+        ),
       );
-
-      this.tabs = await this.repository.list();
     }
 
     if (this.selectedTab) {
