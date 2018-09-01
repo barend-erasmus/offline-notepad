@@ -13,7 +13,9 @@ export class IndexedDBRepository extends BaseRepository {
   public async delete(tab: Tab): Promise<void> {
     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 
-    await objectStore.delete(tab.id);
+    tab.deleted = true;
+
+    objectStore.put(tab);
   }
 
   public async insert(tab: Tab): Promise<void> {
@@ -31,12 +33,16 @@ export class IndexedDBRepository extends BaseRepository {
 
     const tabs: Array<Tab> = await objectStore.getAll();
 
-    return tabs.map((tab: Tab) => new Tab(tab.id, tab.name, tab.content, tab.order));
+    return tabs.map((tab: Tab) => new Tab(tab.id, tab.name, tab.content, tab.order, tab.deleted));
   }
 
   public onChanges(fn: () => Promise<void>): void {}
 
   public async update(tab: Tab): Promise<void> {
+    if (!tab.id) {
+      await this.insert(tab);
+    }
+
     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 
     objectStore.put(tab);

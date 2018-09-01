@@ -26,7 +26,21 @@ export class PouchDBRepository extends BaseRepository {
   public async delete(tab: Tab): Promise<void> {
     const document: any = await this.database.get(tab.id);
 
-    await this.database.remove(document);
+    if (!document) {
+      return null;
+    }
+
+    tab.deleted = true;
+
+    await this.database.put({
+      _id: tab.id,
+      _rev: document._rev,
+      account: this.account,
+      content: tab.content,
+      deleted: tab.deleted,
+      name: tab.name,
+      order: tab.order,
+    });
   }
 
   public async insert(tab: Tab): Promise<void> {
@@ -38,6 +52,7 @@ export class PouchDBRepository extends BaseRepository {
       _id: tab.id,
       account: this.account,
       content: tab.content,
+      deleted: tab.deleted,
       name: tab.name,
       order: tab.order,
     });
@@ -50,7 +65,7 @@ export class PouchDBRepository extends BaseRepository {
 
     return result.rows
       .filter((row: any) => row.doc.account === this.account)
-      .map((row: any) => new Tab(row.doc._id, row.doc.name, row.doc.content, row.doc.order));
+      .map((row: any) => new Tab(row.doc._id, row.doc.name, row.doc.content, row.doc.order, row.doc.deleted));
   }
 
   public onChanges(fn: () => Promise<void>): void {
@@ -72,6 +87,10 @@ export class PouchDBRepository extends BaseRepository {
   }
 
   public async update(tab: Tab): Promise<void> {
+    if (!tab.id) {
+      await this.insert(tab);
+    }
+
     const document: any = await this.database.get(tab.id);
 
     if (!document) {
@@ -83,6 +102,7 @@ export class PouchDBRepository extends BaseRepository {
       _rev: document._rev,
       account: this.account,
       content: tab.content,
+      deleted: tab.deleted,
       name: tab.name,
       order: tab.order,
     });

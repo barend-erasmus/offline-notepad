@@ -105,18 +105,32 @@ export class AppComponent implements OnInit {
     }, 200);
   }
 
-  public onDragStartTab(event: any): void {
-    // console.log(event);
+  public onDragOverTab(event: DragEvent, tab: Tab): void {
+    event.preventDefault();
   }
 
-  public onDropTab(event: any): void {
-    console.log(event);
+  public onDragStartTab(event: any, tab: Tab): void {
+    event.dataTransfer.setData('tab-id', tab.id);
+  }
+
+  public async onDropTab(event: DragEvent, tab: Tab): Promise<void> {
+    const draggedTabId: string = event.dataTransfer.getData('tab-id');
+    const draggedTab: Tab = this.tabs.find((x: Tab) => x.id === draggedTabId);
+    const draggedTabOrder: number = draggedTab.order;
+
+    draggedTab.order = tab.order;
+    tab.order = draggedTabOrder;
+
+    await this.repository.update(draggedTab);
+    await this.repository.update(tab);
+
+    await this.refresh();
   }
 
   protected async addNewTab(content: string): Promise<void> {
     const name: string = this.getNewTabName();
 
-    await this.repository.insert(new Tab(null, name, content, this.getMaximumOrder() + 1));
+    await this.repository.insert(new Tab(null, name, content, this.getMaximumOrder() + 1, false));
 
     (window as any).gtag('event', 'tab_new');
   }
@@ -188,6 +202,8 @@ export class AppComponent implements OnInit {
     // Refresh Tabs
     this.tabs = await this.repository.list();
 
+    this.tabs = this.tabs.sort((a: Tab, b: Tab) => a.order - b.order);
+
     if (this.tabs.length === 0) {
       this.tabs.push(
         new Tab(
@@ -203,6 +219,7 @@ export class AppComponent implements OnInit {
             'Visit us on GitHub (https://github.com/barend-erasmus/offline-notepad)',
           ].join('\r\n'),
           this.getMaximumOrder() + 1,
+          false,
         ),
       );
     }

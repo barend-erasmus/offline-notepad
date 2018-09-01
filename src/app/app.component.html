@@ -3,7 +3,7 @@
     <button *ngIf="!user" (click)="onClickSignIn()" class="button">Sign in<i class="fas fa-sign-in-alt"></i></button>
     <button *ngIf="user" (click)="onClickSignOut()" class="button">Sign out<i class="fas fa-sign-out-alt"></i></button>
     <ul>
-      <li draggable="true" *ngFor="let tab of tabs" class="{{ tab === selectedTab ? 'saved active' : ''}}" (dragstart)="onDragStartTab($event)" (dragend)="onDropTab($event)">
+      <li draggable="true" *ngFor="let tab of tabs" class="{{ tab === selectedTab ? 'saved active' : ''}}" (dragstart)="onDragStartTab($event, tab)" (drop)="onDropTab($event, tab)" (dragover)="onDragOverTab($event, tab)">
         <label *ngIf="(tab === selectedTab && !isInEditMode) || (tab !== selectedTab)" (dblclick)="onDoubleClickTab(tab)" (click)="onClickTab(tab)" onselectstart='return false;'>{{ tab.name }}</label>
         <input *ngIf="tab === selectedTab && isInEditMode" [(ngModel)]="tab.name" (blur)="onBlurTab(tab)" #tabInput type="text" />
         <button (click)="onClickCloseTab(tab)" class="close"></button>

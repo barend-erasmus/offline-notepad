@@ -1,3 +1,3 @@
 export class Tab {
-  constructor(public id: string, public name: string, public content: string, public order: number) {}
+  constructor(public id: string, public name: string, public content: string, public order: number, public deleted: boolean) {}
 }
