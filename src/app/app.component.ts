@@ -202,6 +202,8 @@ export class AppComponent implements OnInit {
     // Refresh Tabs
     this.tabs = await this.repository.list();
 
+    this.tabs = this.tabs.filter((tab: Tab) => !tab.deleted);
+
     this.tabs = this.tabs.sort((a: Tab, b: Tab) => a.order - b.order);
 
     if (this.tabs.length === 0) {
