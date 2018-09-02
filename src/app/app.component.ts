@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChildren, ElementRef, QueryList } from '@angular
 import { BaseRepository } from './repositories/base';
 import { environment } from '../environments/environment';
 import { Tab } from './models/tab';
+import { TextHelper } from './helpers/text';
 
 @Component({
   selector: 'app-root',
@@ -22,19 +23,19 @@ export class AppComponent implements OnInit {
   @ViewChildren('tabInput')
   public tabInputs: QueryList<ElementRef> = null;
 
-  constructor(protected repository: BaseRepository) {
-    this.repository.onChanges(async () => {
-      await this.refresh();
+  constructor() {
+    Tab.eventEmitter.subscribe(async () => {
+      await this.loadTabs();
     });
+  }
+
+  public async ngOnInit(): Promise<void> {
+    await this.loadTabs();
 
     this.initializeGoogleOAuth2();
   }
 
-  public async ngOnInit(): Promise<void> {}
-
   public async onChangeContent(tab: Tab): Promise<void> {
-    // TODO: Clone
-
     if (this.timer) {
       clearTimeout(this.timer);
     }
@@ -42,32 +43,33 @@ export class AppComponent implements OnInit {
     this.timer = setTimeout(async () => {
       this.timer = null;
 
-      await this.repository.update(tab);
-    }, 1200);
+      const account: string = this.getAccount();
+      await tab.save(account);
+
+      (window as any).gtag('event', 'tab_edit');
+    }, 300);
   }
 
   public async onClickCloseTab(tab: Tab): Promise<void> {
-    if (this.tabs.length === 1) {
-      return;
-    }
+    const account: string = this.getAccount();
+    await tab.delete(account);
 
-    await this.repository.delete(tab);
-
-    await this.refresh();
+    await this.loadTabs();
 
     (window as any).gtag('event', 'tab_close');
   }
 
   public async onClickNewTab(): Promise<void> {
-    await this.addNewTab(null);
+    const tab: Tab = await Tab.create(this.getMaximumOrder() + 1);
+    this.tabs.push(tab);
 
-    await this.refresh();
-
-    (window as any).gtag('event', 'tab_open');
+    (window as any).gtag('event', 'tab_add');
   }
 
   public onClickSignIn(): void {
     (window as any).gapi.auth2.getAuthInstance().signIn();
+
+    (window as any).gtag('event', 'sign_in');
   }
 
   public async onClickSignOut(): Promise<void> {
@@ -75,34 +77,32 @@ export class AppComponent implements OnInit {
 
     this.user = null;
 
-    this.repository.resetAccount();
+    await this.loadTabs();
 
-    await this.refresh();
+    (window as any).gtag('event', 'sign_out');
   }
 
   public async onBlurTab(tab: Tab): Promise<void> {
     this.isInEditMode = false;
 
-    await this.repository.update(tab);
-
-    await this.refresh();
+    const account: string = this.getAccount();
+    await tab.save(account);
   }
 
   public async onClickTab(tab: Tab): Promise<void> {
     this.selectedTab = tab;
 
-    await this.refresh();
-
-    (window as any).gtag('event', 'tab_open');
+    (window as any).gtag('event', 'tab_focus');
   }
 
   public onDoubleClickTab(): void {
     this.isInEditMode = true;
 
-    // TODO: Refactor
     setTimeout(() => {
       this.tabInputs.toArray()[0].nativeElement.focus();
     }, 200);
+
+    (window as any).gtag('event', 'tab_rename');
   }
 
   public onDragOverTab(event: DragEvent, tab: Tab): void {
@@ -121,18 +121,14 @@ export class AppComponent implements OnInit {
     draggedTab.order = tab.order;
     tab.order = draggedTabOrder;
 
-    await this.repository.update(draggedTab);
-    await this.repository.update(tab);
+    const account: string = this.getAccount();
 
-    await this.refresh();
-  }
+    await draggedTab.save(account);
+    await tab.save(account);
 
-  protected async addNewTab(content: string): Promise<void> {
-    const name: string = this.getNewTabName();
+    this.tabs = this.tabs.sort((a: Tab, b: Tab) => b.order - a.order);
 
-    await this.repository.insert(new Tab(null, name, content, this.getMaximumOrder() + 1, false));
-
-    (window as any).gtag('event', 'tab_new');
+    (window as any).gtag('event', 'tab_reorder');
   }
 
   protected getMaximumOrder(): number {
@@ -145,18 +141,20 @@ export class AppComponent implements OnInit {
     return maximumOrder;
   }
 
-  protected getNewTabName(): string {
-    let index = 1;
-
-    let name = `new ${index}`;
-
-    while (this.tabs.find((tab: Tab) => tab.name === name)) {
-      index++;
-
-      name = `new ${index}`;
+  protected getAccount(): string {
+    if (this.user) {
+      return `${this.user}`;
     }
 
-    return name;
+    let account: string = localStorage.getItem('account');
+
+    if (!account) {
+      account = TextHelper.generateUUID();
+
+      localStorage.setItem('account', account);
+    }
+
+    return account;
   }
 
   protected initializeGoogleOAuth2(): void {
@@ -175,9 +173,7 @@ export class AppComponent implements OnInit {
 
             this.user = userInfo.getEmail();
 
-            this.repository.setAccount(`${userInfo.getId()}-${this.user}`);
-
-            this.refresh();
+            await this.loadTabs();
           });
 
           if ((window as any).gapi.auth2.getAuthInstance().isSignedIn.get()) {
@@ -187,43 +183,19 @@ export class AppComponent implements OnInit {
               .getBasicProfile();
 
             this.user = userInfo.getEmail();
-
-            this.repository.setAccount(`${userInfo.getId()}-${this.user}`);
-
-            this.refresh();
-          } else {
-            this.refresh();
           }
         });
     });
   }
 
-  protected async refresh(): Promise<void> {
-    // Refresh Tabs
-    this.tabs = await this.repository.list();
+  protected async loadTabs(): Promise<void> {
+    const account: string = this.getAccount();
 
-    this.tabs = this.tabs.filter((tab: Tab) => !tab.deleted);
-
-    this.tabs = this.tabs.sort((a: Tab, b: Tab) => b.order - a.order);
+    this.tabs = await Tab.loadAll(account);
 
     if (this.tabs.length === 0) {
-      this.tabs.push(
-        new Tab(
-          null,
-          this.getNewTabName(),
-          [
-            'Welcome to Offline Notepad',
-            '',
-            'Contributors',
-            '    Barend Erasmus',
-            '    Stuart Green',
-            '',
-            'Visit us on GitHub (https://github.com/barend-erasmus/offline-notepad)',
-          ].join('\r\n'),
-          this.getMaximumOrder() + 1,
-          false,
-        ),
-      );
+      const tab: Tab = await Tab.create(this.getMaximumOrder() + 1);
+      this.tabs.push(tab);
     }
 
     if (this.selectedTab) {
