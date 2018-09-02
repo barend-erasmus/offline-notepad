@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChildren, ElementRef, QueryList } from '@angular
 import { BaseRepository } from './repositories/base';
 import { environment } from '../environments/environment';
 import { Tab } from './models/tab';
+import { Service } from './service';
+import { State } from './models/state';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +11,8 @@ import { Tab } from './models/tab';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  public state: State = null;
+
   public selectedTab: Tab = null;
 
   public isInEditMode = false;
@@ -22,7 +26,7 @@ export class AppComponent implements OnInit {
   @ViewChildren('tabInput')
   public tabInputs: QueryList<ElementRef> = null;
 
-  constructor(protected repository: BaseRepository) {
+  constructor(protected repository: BaseRepository, protected service: Service) {
     this.repository.onChanges(async () => {
       await this.refresh();
     });
@@ -138,7 +142,7 @@ export class AppComponent implements OnInit {
   protected getMaximumOrder(): number {
     const maximumOrder: number = Math.max(...this.tabs.map((tab: Tab) => tab.order));
 
-    if (!maximumOrder || isNaN(maximumOrder)) {
+    if (!maximumOrder || isNaN(maximumOrder) || Math.abs(maximumOrder) === Infinity) {
       return 0;
     }
 
@@ -204,7 +208,7 @@ export class AppComponent implements OnInit {
 
     this.tabs = this.tabs.filter((tab: Tab) => !tab.deleted);
 
-    this.tabs = this.tabs.sort((a: Tab, b: Tab) => a.order - b.order);
+    this.tabs = this.tabs.sort((a: Tab, b: Tab) => b.order - a.order);
 
     if (this.tabs.length === 0) {
       this.tabs.push(

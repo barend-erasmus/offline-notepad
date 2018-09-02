@@ -6,6 +6,7 @@ self.addEventListener('install', (e) => {
     caches.open(cacheName).then((cache) => {
       return cache
         .addAll([
+          '/',
           'index.html',
           `runtime.js`,
           `polyfills.js`,
@@ -13,6 +14,8 @@ self.addEventListener('install', (e) => {
           'vendor.js',
           `main.js`,
           `assets/css/font-awesome.min.css`,
+          'assets/js/api.js',
+          'assets/js/pouchdb.min.js',
         ])
         .then(() => self.skipWaiting());
     }),
