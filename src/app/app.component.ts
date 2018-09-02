@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChildren, ElementRef, QueryList } from '@angular
 import { BaseRepository } from './repositories/base';
 import { environment } from '../environments/environment';
 import { Tab } from './models/tab';
-import { Service } from './service';
-import { State } from './models/state';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +9,6 @@ import { State } from './models/state';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  public state: State = null;
-
   public selectedTab: Tab = null;
 
   public isInEditMode = false;
@@ -26,7 +22,7 @@ export class AppComponent implements OnInit {
   @ViewChildren('tabInput')
   public tabInputs: QueryList<ElementRef> = null;
 
-  constructor(protected repository: BaseRepository, protected service: Service) {
+  constructor(protected repository: BaseRepository) {
     this.repository.onChanges(async () => {
       await this.refresh();
     });
