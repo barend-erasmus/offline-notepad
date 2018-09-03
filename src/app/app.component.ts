@@ -158,42 +158,42 @@ export class AppComponent implements OnInit {
     return account;
   }
 
-  // protected initializeGoogleOAuth2(): void {
-  //   (window as any).gapi.load('client:auth2', () => {
-  //     (window as any).gapi.client
-  //       .init({
-  //         clientId: environment.googleOAuth2ClientId,
-  //         scope: 'profile',
-  //       })
-  //       .then(async () => {
-  //         (window as any).gapi.auth2.getAuthInstance().isSignedIn.listen(async (listenResult: boolean) => {
-  //           if (listenResult) {
-  //             const userInfo: any = (window as any).gapi.auth2
-  //               .getAuthInstance()
-  //               .currentUser.get()
-  //               .getBasicProfile();
+  protected initializeGoogleOAuth2(): void {
+    (window as any).gapi.load('client:auth2', () => {
+      (window as any).gapi.client
+        .init({
+          clientId: environment.googleOAuth2ClientId,
+          scope: 'profile',
+        })
+        .then(async () => {
+          (window as any).gapi.auth2.getAuthInstance().isSignedIn.listen(async (listenResult: boolean) => {
+            if (listenResult) {
+              const userInfo: any = (window as any).gapi.auth2
+                .getAuthInstance()
+                .currentUser.get()
+                .getBasicProfile();
 
-  //             this.user = userInfo.getEmail();
-  //           }
+              this.user = userInfo.getEmail();
+            }
 
-  //           await this.loadTabs();
-  //         });
+            await this.loadTabs();
+          });
 
-  //         const signedIn: boolean = (window as any).gapi.auth2.getAuthInstance().isSignedIn.get();
+          const signedIn: boolean = (window as any).gapi.auth2.getAuthInstance().isSignedIn.get();
 
-  //         if (signedIn) {
-  //           const userInfo: any = (window as any).gapi.auth2
-  //             .getAuthInstance()
-  //             .currentUser.get()
-  //             .getBasicProfile();
+          if (signedIn) {
+            const userInfo: any = (window as any).gapi.auth2
+              .getAuthInstance()
+              .currentUser.get()
+              .getBasicProfile();
 
-  //           this.user = userInfo.getEmail();
-  //         }
+            this.user = userInfo.getEmail();
+          }
 
-  //         await this.loadTabs();
-  //       });
-  //   });
-  // }
+          await this.loadTabs();
+        });
+    });
+  }
 
   protected async loadTabs(): Promise<void> {
     const account: string = this.getAccount();
