@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChildren, ElementRef, QueryList, ChangeDetectorRef } from '@angular/core';
 import { BaseRepository } from './repositories/base';
 import { environment } from '../environments/environment';
 import { Tab } from './models/tab';
 import { TextHelper } from './helpers/text';
+import { AuthenticationService } from './authentication';
 
 @Component({
   selector: 'app-root',
@@ -23,16 +24,16 @@ export class AppComponent implements OnInit {
   @ViewChildren('tabInput')
   public tabInputs: QueryList<ElementRef> = null;
 
-  constructor() {
+  constructor(protected authenticationService: AuthenticationService) {
     Tab.eventEmitter.subscribe(async () => {
       await this.loadTabs();
     });
   }
 
   public async ngOnInit(): Promise<void> {
-    await this.loadTabs();
+    this.user = await this.authenticationService.getUser();
 
-    this.initializeGoogleOAuth2();
+    await this.loadTabs();
   }
 
   public async onChangeContent(tab: Tab): Promise<void> {
@@ -66,16 +67,16 @@ export class AppComponent implements OnInit {
     (window as any).gtag('event', 'tab_add');
   }
 
-  public onClickSignIn(): void {
-    (window as any).gapi.auth2.getAuthInstance().signIn();
+  public async onClickSignIn(): Promise<void> {
+    this.user = await this.authenticationService.signIn();
+
+    await this.loadTabs();
 
     (window as any).gtag('event', 'sign_in');
   }
 
   public async onClickSignOut(): Promise<void> {
-    (window as any).gapi.auth2.getAuthInstance().signOut();
-
-    this.user = null;
+    this.user = await this.authenticationService.signOut();
 
     await this.loadTabs();
 
@@ -157,36 +158,42 @@ export class AppComponent implements OnInit {
     return account;
   }
 
-  protected initializeGoogleOAuth2(): void {
-    (window as any).gapi.load('client:auth2', () => {
-      (window as any).gapi.client
-        .init({
-          clientId: environment.googleOAuth2ClientId,
-          scope: 'profile',
-        })
-        .then(async () => {
-          (window as any).gapi.auth2.getAuthInstance().isSignedIn.listen(async (value) => {
-            const userInfo: any = (window as any).gapi.auth2
-              .getAuthInstance()
-              .currentUser.get()
-              .getBasicProfile();
+  // protected initializeGoogleOAuth2(): void {
+  //   (window as any).gapi.load('client:auth2', () => {
+  //     (window as any).gapi.client
+  //       .init({
+  //         clientId: environment.googleOAuth2ClientId,
+  //         scope: 'profile',
+  //       })
+  //       .then(async () => {
+  //         (window as any).gapi.auth2.getAuthInstance().isSignedIn.listen(async (listenResult: boolean) => {
+  //           if (listenResult) {
+  //             const userInfo: any = (window as any).gapi.auth2
+  //               .getAuthInstance()
+  //               .currentUser.get()
+  //               .getBasicProfile();
 
-            this.user = userInfo.getEmail();
+  //             this.user = userInfo.getEmail();
+  //           }
 
-            await this.loadTabs();
-          });
+  //           await this.loadTabs();
+  //         });
 
-          if ((window as any).gapi.auth2.getAuthInstance().isSignedIn.get()) {
-            const userInfo: any = (window as any).gapi.auth2
-              .getAuthInstance()
-              .currentUser.get()
-              .getBasicProfile();
+  //         const signedIn: boolean = (window as any).gapi.auth2.getAuthInstance().isSignedIn.get();
 
-            this.user = userInfo.getEmail();
-          }
-        });
-    });
-  }
+  //         if (signedIn) {
+  //           const userInfo: any = (window as any).gapi.auth2
+  //             .getAuthInstance()
+  //             .currentUser.get()
+  //             .getBasicProfile();
+
+  //           this.user = userInfo.getEmail();
+  //         }
+
+  //         await this.loadTabs();
+  //       });
+  //   });
+  // }
 
   protected async loadTabs(): Promise<void> {
     const account: string = this.getAccount();
@@ -198,7 +205,7 @@ export class AppComponent implements OnInit {
       this.tabs.push(tab);
     }
 
-    if (this.selectedTab) {
+    if (this.selectedTab && this.tabs.indexOf(this.selectedTab) === -1) {
       this.selectedTab = this.tabs.find((tab: Tab) => tab.id === this.selectedTab.id);
     }
 

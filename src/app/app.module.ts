@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
+import { AuthenticationService } from './authentication';
 
 @NgModule({
   declarations: [AppComponent],
@@ -10,6 +11,7 @@ import { AppComponent } from './app.component';
   providers: [
     // { provide: BaseRepository, useClass: IndexedDBRepository },
     // { provide: BaseRepository, useClass: PouchDBRepository },
+    AuthenticationService,
   ],
   bootstrap: [AppComponent],
 })

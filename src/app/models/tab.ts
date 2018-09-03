@@ -50,14 +50,14 @@ export class Tab {
 
     Tab.database = new (window as any).PouchDB(databaseName, { auto_compaction: true });
 
-    Tab.syncHandler = (window as any).PouchDB.sync(databaseName, `${Tab.url}/offline-notepad`, {
-      live: true,
-      retry: true,
-    }).on('change', (info: any) => {
-      if (info.change.docs.filter((doc: any) => doc.account === account).length > 0) {
-        Tab.eventEmitter.emit();
-      }
-    });
+    // Tab.syncHandler = (window as any).PouchDB.sync(databaseName, `${Tab.url}/offline-notepad`, {
+    //   live: true,
+    //   retry: true,
+    // }).on('change', (info: any) => {
+    //   if (info.change.docs.filter((doc: any) => doc.account === account).length > 0) {
+    //     Tab.eventEmitter.emit();
+    //   }
+    // });
 
     return Tab.database;
   }
