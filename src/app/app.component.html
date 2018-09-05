@@ -3,8 +3,10 @@
     <button *ngIf="!user" (click)="onClickSignIn()" class="button">Sign in<i class="fas fa-sign-in-alt"></i></button>
     <button *ngIf="user" (click)="onClickSignOut()" class="button">Sign out<i class="fas fa-sign-out-alt"></i></button>
     <ul>
-      <li draggable="true" *ngFor="let tab of tabs" class="{{ tab === selectedTab ? 'saved active' : ''}}" (dragstart)="onDragStartTab($event, tab)" (drop)="onDropTab($event, tab)" (dragover)="onDragOverTab($event, tab)">
-        <label *ngIf="(tab === selectedTab && !isInEditMode) || (tab !== selectedTab)" (dblclick)="onDoubleClickTab(tab)" (click)="onClickTab(tab)" onselectstart='return false;'>{{ tab.name }}</label>
+      <li draggable="true" *ngFor="let tab of tabs" class="{{ tab === selectedTab ? 'saved active' : ''}}" (dragstart)="onDragStartTab($event, tab)"
+        (drop)="onDropTab($event, tab)" (dragover)="onDragOverTab($event, tab)">
+        <label *ngIf="(tab === selectedTab && !isInEditMode) || (tab !== selectedTab)" (dblclick)="onDoubleClickTab(tab)" (click)="onClickTab(tab)"
+          onselectstart='return false;'>{{ tab.name }}</label>
         <input *ngIf="tab === selectedTab && isInEditMode" [(ngModel)]="tab.name" (blur)="onBlurTab(tab)" #tabInput type="text" />
         <button (click)="onClickCloseTab(tab)" class="close"></button>
       </li>
@@ -12,15 +14,16 @@
     </ul>
   </div>
   <div class="contents">
-      <div id="lineNumbers" class="lines">
-          <div *ngFor="let number of lineNumbers">{{number}}</div>
-        </div>
-    <textarea id="textArea" *ngIf="selectedTab" [(ngModel)]="selectedTab.content" (keyup)="onChangeContent(selectedTab)" (scroll)="onScroll()"></textarea>
+    <div class="lines">
+      <div *ngFor="let lineNumber of lineNumbers">{{ lineNumber }}</div>
+    </div>
+    <textarea *ngIf="selectedTab" [(ngModel)]="selectedTab.content" (keyup)="onChangeContent(selectedTab)" (scroll)="onScrollContent()"></textarea>
   </div>
   <div class="status-bar">
     <div>
       Contributors: <a target="_blank" href="https://www.linkedin.com/in/developersworkspace">Barend Erasmus</a>, <a target="_blank"
-        href="https://www.linkedin.com/in/stuartngreen">Stuart Green</a>
+        href="https://www.linkedin.com/in/stuartngreen">Stuart Green</a>, <a target="_blank"
+        href="https://www.linkedin.com/in/storm-simmons-65b819119">Storm Simmons</a>
     </div>
   </div>
 </div>
