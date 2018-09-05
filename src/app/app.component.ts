@@ -24,8 +24,7 @@ export class AppComponent implements OnInit {
   @ViewChildren('tabInput')
   public tabInputs: QueryList<ElementRef> = null;
 
-  constructor(protected authenticationService: AuthenticationService, private elRef:ElementRef) {
-
+  constructor(protected authenticationService: AuthenticationService, protected elementRef: ElementRef) {
     Tab.eventEmitter.subscribe(async () => {
       await this.loadTabs();
     });
@@ -36,7 +35,7 @@ export class AppComponent implements OnInit {
 
     await this.loadTabs();
 
-    await this.loadLineNumbers();
+    this.loadLineNumbers();
   }
 
   public async onChangeContent(tab: Tab): Promise<void> {
@@ -44,7 +43,7 @@ export class AppComponent implements OnInit {
       clearTimeout(this.timer);
     }
 
-    await this.loadLineNumbers();
+    this.loadLineNumbers();
 
     this.timer = setTimeout(async () => {
       this.timer = null;
@@ -97,7 +96,9 @@ export class AppComponent implements OnInit {
 
   public async onClickTab(tab: Tab): Promise<void> {
     this.selectedTab = tab;
-    await this.loadLineNumbers();
+
+    this.loadLineNumbers();
+
     (window as any).gtag('event', 'tab_focus');
   }
 
@@ -119,11 +120,6 @@ export class AppComponent implements OnInit {
     event.dataTransfer.setData('tab-id', tab.id);
   }
 
-  public onScroll(): void {
-    const textScrollHeight = this.elRef.nativeElement.querySelector('#textArea').scrollTop;
-    this.elRef.nativeElement.querySelector('#lineNumbers').scrollTo({top: textScrollHeight});
-  }
-
   public async onDropTab(event: DragEvent, tab: Tab): Promise<void> {
     const draggedTabId: string = event.dataTransfer.getData('tab-id');
     const draggedTab: Tab = this.tabs.find((x: Tab) => x.id === draggedTabId);
@@ -140,6 +136,14 @@ export class AppComponent implements OnInit {
     this.tabs = this.tabs.sort((a: Tab, b: Tab) => b.order - a.order);
 
     (window as any).gtag('event', 'tab_reorder');
+  }
+
+  public onScrollContent(): void {
+    const textAreaElement = this.elementRef.nativeElement.querySelector('textarea');
+
+    const textScrollHeight: number = textAreaElement.scrollTop;
+
+    textAreaElement.querySelector('div').scrollTo({ top: textScrollHeight });
   }
 
   protected getMaximumOrder(): number {
@@ -185,21 +189,15 @@ export class AppComponent implements OnInit {
     if (!this.selectedTab) {
       this.selectedTab = this.tabs[0];
     }
-
-    console.log(this.tabs);
   }
 
-  protected async loadLineNumbers(): Promise<void> {
-
-    if(!this.selectedTab.content){
+  protected loadLineNumbers(): void {
+    if (!this.selectedTab || !this.selectedTab.content) {
       this.lineNumbers = [1];
+
       return;
     }
-    const lines = this.selectedTab.content.split('\n')
-    let lineArr:number[] = []
-    for(let i = 1 ; i <= lines.length ; i++){
-      lineArr.push(i);
-    }
-    this.lineNumbers = lineArr;
+
+    this.lineNumbers = this.selectedTab.content.split('\n').map((line: string, index: number) => index + 1);
   }
 }
