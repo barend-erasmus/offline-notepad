@@ -82,6 +82,7 @@ Offline-first Notepad with built in syncing
 
 * [Barend Erasmus](https://www.linkedin.com/in/developersworkspace)
 * [Stuart Green](https://www.linkedin.com/in/stuartngreen)
+* [Storm Simmons](https://www.linkedin.com/in/storm-simmons-65b819119)
 
 ## Contribute
 
