@@ -1,68 +1,68 @@
-import { Injectable } from '@angular/core';
-import idb, { UpgradeDB, ObjectStore, Transaction, DB } from 'idb';
-import { BaseRepository } from './base';
-import { environment } from '../../environments/environment';
-import { Tab } from '../models/tab';
+// import { Injectable } from '@angular/core';
+// import idb, { UpgradeDB, ObjectStore, Transaction, DB } from 'idb';
+// import { BaseRepository } from './base';
+// import { environment } from '../../environments/environment';
+// import { Tab } from '../models/tab';
 
-@Injectable()
-export class IndexedDBRepository extends BaseRepository {
-  constructor() {
-    super();
-  }
+// @Injectable()
+// export class IndexedDBRepository extends BaseRepository {
+//   constructor() {
+//     super();
+//   }
 
-  public async delete(tab: Tab): Promise<void> {
-    const objectStore: ObjectStore<any, any> = await this.getObjectStore();
+//   public async delete(tab: Tab): Promise<void> {
+//     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 
-    tab.deleted = true;
+//     tab.deleted = true;
 
-    objectStore.put(tab);
-  }
+//     objectStore.put(tab);
+//   }
 
-  public async insert(tab: Tab): Promise<void> {
-    if (!tab.id) {
-      tab.id = this.genereateUUID();
-    }
+//   public async insert(tab: Tab): Promise<void> {
+//     if (!tab.id) {
+//       tab.id = this.genereateUUID();
+//     }
 
-    const objectStore: ObjectStore<any, any> = await this.getObjectStore();
+//     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 
-    objectStore.add(tab);
-  }
+//     objectStore.add(tab);
+//   }
 
-  public async list(): Promise<Array<Tab>> {
-    const objectStore: ObjectStore<any, any> = await this.getObjectStore();
+//   public async list(): Promise<Array<Tab>> {
+//     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 
-    const tabs: Array<Tab> = await objectStore.getAll();
+//     const tabs: Array<Tab> = await objectStore.getAll();
 
-    return tabs.map((tab: Tab) => new Tab(tab.id, tab.name, tab.content, tab.order, tab.deleted));
-  }
+//     return tabs.map((tab: Tab) => new Tab(tab.id, tab.name, tab.content, tab.order, tab.deleted));
+//   }
 
-  public onChanges(fn: () => Promise<void>): void {}
+//   public onChanges(fn: () => Promise<void>): void {}
 
-  public async update(tab: Tab): Promise<void> {
-    if (!tab.id) {
-      await this.insert(tab);
-    }
+//   public async update(tab: Tab): Promise<void> {
+//     if (!tab.id) {
+//       await this.insert(tab);
+//     }
 
-    const objectStore: ObjectStore<any, any> = await this.getObjectStore();
+//     const objectStore: ObjectStore<any, any> = await this.getObjectStore();
 
-    objectStore.put(tab);
-  }
+//     objectStore.put(tab);
+//   }
 
-  public async resetAccount(): Promise<void> {}
+//   public async resetAccount(): Promise<void> {}
 
-  public async setAccount(account: string): Promise<void> {}
+//   public async setAccount(account: string): Promise<void> {}
 
-  protected async getObjectStore(): Promise<ObjectStore<any, any>> {
-    const databaseName = `offline-notepad-${environment.version}`;
+//   protected async getObjectStore(): Promise<ObjectStore<any, any>> {
+//     const databaseName = `offline-notepad-${environment.version}`;
 
-    const database: DB = await idb.open(databaseName, 1, (upgradeDB: UpgradeDB) => {
-      upgradeDB.createObjectStore('tabs', { keyPath: 'id' });
-    });
+//     const database: DB = await idb.open(databaseName, 1, (upgradeDB: UpgradeDB) => {
+//       upgradeDB.createObjectStore('tabs', { keyPath: 'id' });
+//     });
 
-    const transaction: Transaction = database.transaction('tabs', 'readwrite');
+//     const transaction: Transaction = database.transaction('tabs', 'readwrite');
 
-    const objectStore: ObjectStore<any, any> = transaction.objectStore('tabs');
+//     const objectStore: ObjectStore<any, any> = transaction.objectStore('tabs');
 
-    return objectStore;
-  }
-}
+//     return objectStore;
+//   }
+// }

@@ -1,6 +1,4 @@
-import { Component, OnInit, ViewChildren, ElementRef, QueryList, ChangeDetectorRef } from '@angular/core';
-import { BaseRepository } from './repositories/base';
-import { environment } from '../environments/environment';
+import { Component, OnInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { Tab } from './models/tab';
 import { TextHelper } from './helpers/text';
 import { AuthenticationService } from './authentication';
@@ -158,43 +156,6 @@ export class AppComponent implements OnInit {
     return account;
   }
 
-  protected initializeGoogleOAuth2(): void {
-    (window as any).gapi.load('client:auth2', () => {
-      (window as any).gapi.client
-        .init({
-          clientId: environment.googleOAuth2ClientId,
-          scope: 'profile',
-        })
-        .then(async () => {
-          (window as any).gapi.auth2.getAuthInstance().isSignedIn.listen(async (listenResult: boolean) => {
-            if (listenResult) {
-              const userInfo: any = (window as any).gapi.auth2
-                .getAuthInstance()
-                .currentUser.get()
-                .getBasicProfile();
-
-              this.user = userInfo.getEmail();
-            }
-
-            await this.loadTabs();
-          });
-
-          const signedIn: boolean = (window as any).gapi.auth2.getAuthInstance().isSignedIn.get();
-
-          if (signedIn) {
-            const userInfo: any = (window as any).gapi.auth2
-              .getAuthInstance()
-              .currentUser.get()
-              .getBasicProfile();
-
-            this.user = userInfo.getEmail();
-          }
-
-          await this.loadTabs();
-        });
-    });
-  }
-
   protected async loadTabs(): Promise<void> {
     const account: string = this.getAccount();
 
@@ -212,5 +173,7 @@ export class AppComponent implements OnInit {
     if (!this.selectedTab) {
       this.selectedTab = this.tabs[0];
     }
+
+    console.log(this.tabs);
   }
 }

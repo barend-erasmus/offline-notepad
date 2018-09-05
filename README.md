@@ -34,7 +34,7 @@ Offline-first Notepad with built in syncing
     * CHANGE: Support Edge
 * 0.1.6 (2018-09-01)
     * CHANGE: Drag & Drop Tabs
-* 0.1.7 (2018-09-02)
+* 0.1.7 (2018-09-05)
     * CHANGE: Optimizations
 
 ## Dependencies

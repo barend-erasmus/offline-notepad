@@ -34,7 +34,7 @@ export class Tab {
       .filter((row: any) => row.doc.account === account)
       .map((row: any) => new Tab(row.doc._id, row.doc.name, row.doc.content, row.doc.order, row.doc.deleted))
       .filter((tab: Tab) => !tab.deleted)
-      .sort((a: Tab, b: Tab) => b.order - a.order);
+      .sort((a: Tab, b: Tab) => a.order - b.order);
   }
 
   protected static getDatabase(account: string): Promise<any> {
@@ -50,14 +50,14 @@ export class Tab {
 
     Tab.database = new (window as any).PouchDB(databaseName, { auto_compaction: true });
 
-    // Tab.syncHandler = (window as any).PouchDB.sync(databaseName, `${Tab.url}/offline-notepad`, {
-    //   live: true,
-    //   retry: true,
-    // }).on('change', (info: any) => {
-    //   if (info.change.docs.filter((doc: any) => doc.account === account).length > 0) {
-    //     Tab.eventEmitter.emit();
-    //   }
-    // });
+    Tab.syncHandler = (window as any).PouchDB.sync(databaseName, `${Tab.url}/offline-notepad`, {
+      live: true,
+      retry: true,
+    }).on('change', (info: any) => {
+      if (info.change.direction === 'pull' && info.change.docs.filter((doc: any) => doc.account === account).length > 0) {
+        Tab.eventEmitter.emit();
+      }
+    });
 
     return Tab.database;
   }

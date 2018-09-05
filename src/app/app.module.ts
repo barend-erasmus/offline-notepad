@@ -9,8 +9,6 @@ import { AuthenticationService } from './authentication';
   declarations: [AppComponent],
   imports: [BrowserModule, FormsModule],
   providers: [
-    // { provide: BaseRepository, useClass: IndexedDBRepository },
-    // { provide: BaseRepository, useClass: PouchDBRepository },
     AuthenticationService,
   ],
   bootstrap: [AppComponent],
