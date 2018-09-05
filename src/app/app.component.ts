@@ -15,6 +15,8 @@ export class AppComponent implements OnInit {
 
   public tabs: Array<Tab> = null;
 
+  public lineNumbers: number[];
+
   protected timer: any = null;
 
   public user: string = null;
@@ -32,12 +34,16 @@ export class AppComponent implements OnInit {
     this.user = await this.authenticationService.getUser();
 
     await this.loadTabs();
+
+    await this.loadLineNumbers();
   }
 
   public async onChangeContent(tab: Tab): Promise<void> {
     if (this.timer) {
       clearTimeout(this.timer);
     }
+
+    await this.loadLineNumbers();
 
     this.timer = setTimeout(async () => {
       this.timer = null;
@@ -90,7 +96,7 @@ export class AppComponent implements OnInit {
 
   public async onClickTab(tab: Tab): Promise<void> {
     this.selectedTab = tab;
-
+    await this.loadLineNumbers();
     (window as any).gtag('event', 'tab_focus');
   }
 
@@ -110,6 +116,11 @@ export class AppComponent implements OnInit {
 
   public onDragStartTab(event: any, tab: Tab): void {
     event.dataTransfer.setData('tab-id', tab.id);
+  }
+
+  public onScroll(): void {
+    const textScrollHeight = document.getElementById('textArea').scrollTop;
+    document.getElementById('lineNumbers').scrollTo({top: textScrollHeight});
   }
 
   public async onDropTab(event: DragEvent, tab: Tab): Promise<void> {
@@ -175,5 +186,19 @@ export class AppComponent implements OnInit {
     }
 
     console.log(this.tabs);
+  }
+
+  protected async loadLineNumbers(): Promise<void> {
+
+    if(!this.selectedTab.content){
+      this.lineNumbers = [1];
+      return;
+    }
+    const lines = this.selectedTab.content.split('\n')
+    let lineArr:number[] = []
+    for(let i = 1 ; i <= lines.length ; i++){
+      lineArr.push(i);
+    }
+    this.lineNumbers = lineArr;
   }
 }

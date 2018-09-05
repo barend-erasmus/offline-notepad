@@ -12,7 +12,10 @@
     </ul>
   </div>
   <div class="contents">
-    <textarea *ngIf="selectedTab" [(ngModel)]="selectedTab.content" (keyup)="onChangeContent(selectedTab)"></textarea>
+      <div id="lineNumbers" class="lines">
+          <div *ngFor="let number of lineNumbers">{{number}}</div>
+        </div>
+    <textarea id="textArea" *ngIf="selectedTab" [(ngModel)]="selectedTab.content" (keyup)="onChangeContent(selectedTab)" (scroll)="onScroll()"></textarea>
   </div>
   <div class="status-bar">
     <div>
