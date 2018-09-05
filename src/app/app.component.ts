@@ -13,9 +13,9 @@ export class AppComponent implements OnInit {
 
   public isInEditMode = false;
 
-  public tabs: Array<Tab> = null;
+  public lineNumbers: Array<number> = null;
 
-  public lineNumbers: number[];
+  public tabs: Array<Tab> = null;
 
   protected timer: any = null;
 

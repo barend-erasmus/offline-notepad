@@ -1,7 +1,7 @@
 # Offline Notepad
 Offline-first Notepad with built in syncing
 
-![](https://travis-ci.org/barend-erasmus/offline-notepad.svg?branch=master) ![](https://img.shields.io/badge/version-v0.1.7-brightgreen.svg?style=flat-square)
+![](https://travis-ci.org/barend-erasmus/offline-notepad.svg?branch=master) ![](https://img.shields.io/badge/version-v0.1.8-brightgreen.svg?style=flat-square)
 
 [View Live](https://offline-notepad.com/index.html)
 
@@ -20,6 +20,8 @@ Offline-first Notepad with built in syncing
 * ![](docs/images/implemented.svg) Sync using GoogleAuth
 * ![](docs/images/implemented.svg) Line Numbers
 * ![](docs/images/implemented.svg) Drag & Drop Tabs
+* ![](docs/images/not-implemented.svg) Tab(Tabulator) Key
+* ![](docs/images/not-implemented.svg) Recover Closed Tabs
 
 ## Release History
 
@@ -36,6 +38,8 @@ Offline-first Notepad with built in syncing
     * CHANGE: Drag & Drop Tabs
 * 0.1.7 (2018-09-05)
     * CHANGE: Optimizations
+* 0.1.8 (2018-09-06)
+    * CHANGE: Line Numbers
 
 ## Dependencies
 
