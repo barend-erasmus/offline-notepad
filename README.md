@@ -22,6 +22,8 @@ Offline-first Notepad with built in syncing
 * ![](docs/images/implemented.svg) Drag & Drop Tabs
 * ![](docs/images/not-implemented.svg) Tab(Tabulator) Key
 * ![](docs/images/not-implemented.svg) Recover Closed Tabs
+* ![](docs/images/not-implemented.svg) Dark/Light Themes
+* ![](docs/images/not-implemented.svg) Right Click Context Menu
 
 ## Release History
 
