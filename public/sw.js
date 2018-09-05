@@ -14,7 +14,6 @@ self.addEventListener('install', (e) => {
           'vendor.js',
           `main.js`,
           `assets/css/font-awesome.min.css`,
-          'assets/js/api.js',
           'assets/js/pouchdb.min.js',
         ])
         .then(() => self.skipWaiting());
