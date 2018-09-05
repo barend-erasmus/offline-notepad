@@ -15,6 +15,8 @@ export class AppComponent implements OnInit {
 
   public tabs: Array<Tab> = null;
 
+  public lineNumbers: number[];
+
   protected timer: any = null;
 
   public user: string = null;
@@ -22,7 +24,7 @@ export class AppComponent implements OnInit {
   @ViewChildren('tabInput')
   public tabInputs: QueryList<ElementRef> = null;
 
-  constructor(protected authenticationService: AuthenticationService) {
+  constructor(protected authenticationService: AuthenticationService, protected elementRef: ElementRef) {
     Tab.eventEmitter.subscribe(async () => {
       await this.loadTabs();
     });
@@ -32,12 +34,16 @@ export class AppComponent implements OnInit {
     this.user = await this.authenticationService.getUser();
 
     await this.loadTabs();
+
+    this.loadLineNumbers();
   }
 
   public async onChangeContent(tab: Tab): Promise<void> {
     if (this.timer) {
       clearTimeout(this.timer);
     }
+
+    this.loadLineNumbers();
 
     this.timer = setTimeout(async () => {
       this.timer = null;
@@ -91,6 +97,8 @@ export class AppComponent implements OnInit {
   public async onClickTab(tab: Tab): Promise<void> {
     this.selectedTab = tab;
 
+    this.loadLineNumbers();
+
     (window as any).gtag('event', 'tab_focus');
   }
 
@@ -128,6 +136,14 @@ export class AppComponent implements OnInit {
     this.tabs = this.tabs.sort((a: Tab, b: Tab) => b.order - a.order);
 
     (window as any).gtag('event', 'tab_reorder');
+  }
+
+  public onScrollContent(): void {
+    const textAreaElement = this.elementRef.nativeElement.querySelector('textarea');
+
+    const textScrollHeight: number = textAreaElement.scrollTop;
+
+    textAreaElement.querySelector('div').scrollTo({ top: textScrollHeight });
   }
 
   protected getMaximumOrder(): number {
@@ -173,7 +189,15 @@ export class AppComponent implements OnInit {
     if (!this.selectedTab) {
       this.selectedTab = this.tabs[0];
     }
+  }
 
-    console.log(this.tabs);
+  protected loadLineNumbers(): void {
+    if (!this.selectedTab || !this.selectedTab.content) {
+      this.lineNumbers = [1];
+
+      return;
+    }
+
+    this.lineNumbers = this.selectedTab.content.split('\n').map((line: string, index: number) => index + 1);
   }
 }
