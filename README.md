@@ -18,7 +18,7 @@ Offline-first Notepad with built in syncing
 * ![](docs/images/not-implemented.svg) Export / Download
 * ![](docs/images/implemented.svg) Offline Caching using Service Worker
 * ![](docs/images/implemented.svg) Sync using GoogleAuth
-* ![](docs/images/not-implemented.svg) Line Numbers
+* ![](docs/images/implemented.svg) Line Numbers
 * ![](docs/images/implemented.svg) Drag & Drop Tabs
 
 ## Release History
