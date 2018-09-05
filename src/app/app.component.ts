@@ -24,7 +24,8 @@ export class AppComponent implements OnInit {
   @ViewChildren('tabInput')
   public tabInputs: QueryList<ElementRef> = null;
 
-  constructor(protected authenticationService: AuthenticationService) {
+  constructor(protected authenticationService: AuthenticationService, private elRef:ElementRef) {
+
     Tab.eventEmitter.subscribe(async () => {
       await this.loadTabs();
     });
@@ -119,8 +120,8 @@ export class AppComponent implements OnInit {
   }
 
   public onScroll(): void {
-    const textScrollHeight = document.getElementById('textArea').scrollTop;
-    document.getElementById('lineNumbers').scrollTo({top: textScrollHeight});
+    const textScrollHeight = this.elRef.nativeElement.querySelector('#textArea').scrollTop;
+    this.elRef.nativeElement.querySelector('#lineNumbers').scrollTo({top: textScrollHeight});
   }
 
   public async onDropTab(event: DragEvent, tab: Tab): Promise<void> {
