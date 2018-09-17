@@ -8,7 +8,8 @@
     "build-prod": "ng build --prod --aot --base-href=\"https://offline-notepad.com/\" --deploy-url=\"https://offline-notepad.com/\" --output-hashing=none",
     "test": "ng build --prod --aot --base-href=\"https://offline-notepad.com/\" --deploy-url=\"https://offline-notepad.com/\" --output-hashing=none",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "dev-utils": "dev-utils ensure-packages && dev-utils ensure-latest-packages && dev-utils verify-prettier-config-js --noreplace && dev-utils verify-travis-ci --noreplace && dev-utils verify-tsconfig-json --noreplace && dev-utils verify-tslint-json --noreplace"
   },
   "private": true,
   "dependencies": {
@@ -27,14 +28,15 @@
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.8.1",
+    "@angular-devkit/build-angular": "^0.8.2",
     "@angular/cli": "^6.2.2",
     "@angular/compiler-cli": "^6.1.7",
     "@angular/language-service": "^6.1.7",
     "@types/jasmine": "^2.8.8",
     "@types/jasminewd2": "^2.0.3",
-    "@types/node": "^10.9.4",
+    "@types/node": "^10.10.0",
     "@types/pouchdb": "^6.3.2",
+    "@xyzblocks/dev-utils": "^1.0.7",
     "codelyzer": "^4.4.4",
     "jasmine-core": "^3.2.1",
     "jasmine-spec-reporter": "^4.2.1",

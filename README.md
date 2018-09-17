@@ -44,7 +44,6 @@ Offline-first Notepad with built in syncing
     * CHANGE: Line Numbers
 
 ## Dependencies
-
 * [@angular/animations](https://www.npmjs.com/package/@angular/animations) - Angular - animations integration with web-animations
 * [@angular/common](https://www.npmjs.com/package/@angular/common) - Angular - commonly needed directives and services
 * [@angular/compiler](https://www.npmjs.com/package/@angular/compiler) - Angular - the compiler library
@@ -59,8 +58,7 @@ Offline-first Notepad with built in syncing
 * [rxjs](https://www.npmjs.com/package/rxjs) - Reactive Extensions for modern JavaScript
 * [zone.js](https://www.npmjs.com/package/zone.js) - Zones for JavaScript
 
-### Dev Dependencies
-
+## Dev Dependencies
 * [@angular-devkit/build-angular](https://www.npmjs.com/package/@angular-devkit/build-angular) - Angular Webpack Build Facade
 * [@angular/cli](https://www.npmjs.com/package/@angular/cli) - CLI tool for Angular
 * [@angular/compiler-cli](https://www.npmjs.com/package/@angular/compiler-cli) - Angular - the compiler CLI for Node.js
@@ -69,6 +67,7 @@ Offline-first Notepad with built in syncing
 * [@types/jasminewd2](https://www.npmjs.com/package/@types/jasminewd2) - TypeScript definitions for jasminewd2
 * [@types/node](https://www.npmjs.com/package/@types/node) - TypeScript definitions for Node.js
 * [@types/pouchdb](https://www.npmjs.com/package/@types/pouchdb) - TypeScript definitions for pouchdb
+* [@xyzblocks/dev-utils](https://www.npmjs.com/package/@xyzblocks/dev-utils) - Developer tools for Angular and Node.js Projects
 * [codelyzer](https://www.npmjs.com/package/codelyzer) - Linting for Angular applications, following angular.io/styleguide.
 * [jasmine-core](https://www.npmjs.com/package/jasmine-core) - Official packaging of Jasmine's core files for use by Node.js projects.
 * [jasmine-spec-reporter](https://www.npmjs.com/package/jasmine-spec-reporter) - Spec reporter for jasmine behavior-driven development framework
