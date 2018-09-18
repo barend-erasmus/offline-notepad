@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChildren, ElementRef, QueryList } from '@angular
 import { Tab } from './models/tab';
 import { TextHelper } from './helpers/text';
 import { AuthenticationService } from './authentication';
+import { ContextMenuItem } from '@xyzblocks/ng-utils';
+import { DownloadHelper } from '@app/helpers/download';
 
 @Component({
   selector: 'app-root',
@@ -9,20 +11,35 @@ import { AuthenticationService } from './authentication';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  public selectedTab: Tab = null;
+  public contextMenuItems: Array<ContextMenuItem> = [
+    {
+      text: 'Download',
+    },
+    {
+      text: 'Close',
+    },
+  ];
+
+  public contextMenuX: number = null;
+
+  public contextMenuY: number = null;
 
   public isInEditMode = false;
 
   public lineNumbers: Array<number> = null;
+
+  public selectedTab: Tab = null;
+
+  public showContextMenu = false;
+
+  @ViewChildren('tabInput')
+  public tabInputs: QueryList<ElementRef> = null;
 
   public tabs: Array<Tab> = null;
 
   protected timer: any = null;
 
   public user: string = null;
-
-  @ViewChildren('tabInput')
-  public tabInputs: QueryList<ElementRef> = null;
 
   constructor(protected authenticationService: AuthenticationService, protected elementRef: ElementRef) {
     Tab.eventEmitter.subscribe(async () => {
@@ -100,6 +117,38 @@ export class AppComponent implements OnInit {
     this.loadLineNumbers();
 
     (window as any).gtag('event', 'tab_focus');
+  }
+
+  public onContextMenu(event: MouseEvent): boolean {
+    this.contextMenuX = event.x;
+    this.contextMenuY = event.y;
+
+    this.showContextMenu = true;
+
+    return false;
+  }
+
+  public onContextMenuSelect(item: ContextMenuItem): void {
+    this.showContextMenu = false;
+
+    switch (item.text) {
+      case 'Close':
+        this.onClickCloseTab(this.selectedTab);
+        break;
+      case 'Download':
+        const content: string = this.selectedTab.content.replace(new RegExp('([^\r]\n)', 'g'), '\r\n');
+        const encodedContent: string = encodeURIComponent(content);
+
+        DownloadHelper.download(
+          `data:text/plain;charset=utf-8,${encodedContent}`,
+          `${this.selectedTab.name}.txt`,
+        );
+        break;
+    }
+  }
+
+  public onContextMenuClose(event): void {
+    this.showContextMenu = false;
   }
 
   public onDoubleClickTab(): void {
