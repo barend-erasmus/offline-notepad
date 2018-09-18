@@ -3,7 +3,11 @@ export interface ITab {
 
   deleted: boolean;
 
+  editMode: boolean;
+
   id: string;
+
+  lineNumbers: Array<number>;
 
   name: string;
 

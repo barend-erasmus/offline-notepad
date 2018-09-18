@@ -1,4 +1,4 @@
-const version = '0.1.9';
+const version = '0.1.10';
 const cacheName = `offline-notepad-${version}`;
 
 self.addEventListener('install', (e) => {
