@@ -1,11 +1,8 @@
-import { environment } from '@env/environment';
 import { ITab } from '@app/interfaces/tab';
 import * as uuid from 'uuid';
 
 export class Persistence {
   protected static database: any = null;
-
-  protected static syncHandler: any = null;
 
   protected static url = 'https://couchdb.offline-notepad.com';
 
@@ -26,14 +23,24 @@ export class Persistence {
           name: row.doc.name,
           order: row.doc.order,
           selected: row.doc.selected,
-        } as ITab;
+        };
       })
       .sort((a: ITab, b: ITab) => a.order - b.order);
   }
 
   public static async upsert(tab: ITab, account: string): Promise<void> {
-    if (!(await Persistence.update(tab, account))) {
+    const existingTab: ITab = await Persistence.find(tab.id, account);
+
+    if (!existingTab) {
       await Persistence.insert(tab, account);
+
+      return;
+    }
+
+    if (Persistence.hash(existingTab) !== Persistence.hash(tab)) {
+      await Persistence.update(tab, account);
+
+      return;
     }
   }
 
@@ -42,27 +49,36 @@ export class Persistence {
       return Persistence.database;
     }
 
-    if (Persistence.syncHandler) {
-      Persistence.syncHandler.cancel();
-    }
-
-    const databaseName = `offline-notepad-${environment.version}`;
-
-    Persistence.database = new (window as any).PouchDB(databaseName, { auto_compaction: true });
-
-    Persistence.syncHandler = (window as any).PouchDB.sync(databaseName, `${Persistence.url}/offline-notepad`, {
-      live: true,
-      retry: true,
-    }).on('change', (info: any) => {
-      if (
-        info.change.direction === 'pull' &&
-        info.change.docs.filter((doc: any) => doc.account === account).length > 0
-      ) {
-        // TODO
-      }
-    });
+    Persistence.database = new (window as any).PouchDB(`${Persistence.url}/offline-notepad`);
 
     return Persistence.database;
+  }
+
+  protected static async find(id: string, account: string): Promise<ITab> {
+    try {
+      const document: any = await (await Persistence.getDatabase(account)).get(id);
+
+      if (!document) {
+        return null;
+      }
+
+      return {
+        content: document.content,
+        deleted: document.deleted,
+        editMode: document.editMode,
+        id: document._id,
+        lineNumbers: document.lineNumbers,
+        name: document.name,
+        order: document.order,
+        selected: document.selected,
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  protected static hash(tab: ITab): string {
+    return JSON.stringify(tab);
   }
 
   protected static async insert(tab: ITab, account: string): Promise<ITab> {

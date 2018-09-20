@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
 
     setInterval(() => {
       this.sync();
-    }, 5000);
+    }, 10000);
   }
 
   public async ngOnInit(): Promise<void> {
@@ -46,11 +46,15 @@ export class AppComponent implements OnInit {
   public async onClickSignIn(): Promise<void> {
     this.user = await this.authenticationService.signIn();
 
+    this.applicationState.setTabs(await Persistence.findAllTabs(`${this.user ? this.user : this.account}`));
+
     (window as any).gtag('event', 'sign_in');
   }
 
   public async onClickSignOut(): Promise<void> {
     this.user = await this.authenticationService.signOut();
+
+    this.applicationState.setTabs(await Persistence.findAllTabs(`${this.user ? this.user : this.account}`));
 
     (window as any).gtag('event', 'sign_out');
   }
