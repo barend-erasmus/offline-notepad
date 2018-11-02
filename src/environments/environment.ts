@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   googleOAuth2ClientId: '644151655367-o2v0blfbbm4mhp688kf1m5g3nrmpqq0d.apps.googleusercontent.com',
-  version: '0.1.9',
+  version: '0.1.10',
 };
 
 /*

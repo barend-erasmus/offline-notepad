@@ -1,7 +1,7 @@
 # Offline Notepad
 Offline-first Notepad with built in syncing
 
-![](https://travis-ci.org/barend-erasmus/offline-notepad.svg?branch=master) ![](https://img.shields.io/badge/version-v0.1.9-brightgreen.svg?style=flat-square)
+![](https://travis-ci.org/barend-erasmus/offline-notepad.svg?branch=master) ![](https://img.shields.io/badge/version-v0.1.10-brightgreen.svg?style=flat-square)
 
 [View Live](https://offline-notepad.com/index.html)
 
@@ -15,7 +15,7 @@ Offline-first Notepad with built in syncing
 * ![](docs/images/implemented.svg) Google Analytics
 * ![](docs/images/implemented.svg) Support Edge
 * ![](docs/images/implemented.svg) Modify Tab Names
-* ![](docs/images/not-implemented.svg) Export / Download
+* ![](docs/images/implemented.svg) Download
 * ![](docs/images/implemented.svg) Offline Caching using Service Worker
 * ![](docs/images/implemented.svg) Sync using GoogleAuth
 * ![](docs/images/implemented.svg) Line Numbers
@@ -23,7 +23,7 @@ Offline-first Notepad with built in syncing
 * ![](docs/images/not-implemented.svg) Tab(Tabulator) Key
 * ![](docs/images/not-implemented.svg) Recover Closed Tabs
 * ![](docs/images/not-implemented.svg) Dark/Light Themes
-* ![](docs/images/not-implemented.svg) Right Click Context Menu
+* ![](docs/images/implemented.svg) Context Menu
 
 ## Release History
 
@@ -44,6 +44,9 @@ Offline-first Notepad with built in syncing
     * CHANGE: Line Numbers
 * 0.1.9 (2018-09-17)
     * CHANGE: Update Packages
+* 0.1.10 (2018-09-18)
+    * CHANGE: Download
+    * CHANGE: Context Menu
 
 ## Dependencies
 * [@angular/animations](https://www.npmjs.com/package/@angular/animations) - Angular - animations integration with web-animations
