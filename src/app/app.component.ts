@@ -55,6 +55,18 @@ export class AppComponent implements OnInit {
     }, 300);
   }
 
+  public onKeydown(event) {
+    event.preventDefault();
+
+    const textAreaElement: HTMLTextAreaElement = this.elementRef.nativeElement.querySelector('textarea');
+    const text = textAreaElement.value;
+    const start = textAreaElement.selectionStart;
+    const end = textAreaElement.selectionEnd;
+    const tabbedText = text.substring(0, start) + '\t' + text.substring(end);
+    textAreaElement.value = tabbedText;
+    textAreaElement.selectionStart = textAreaElement.selectionEnd = start + 1;
+  }
+
   public async onClickCloseTab(tab: Tab): Promise<void> {
     const account: string = this.getAccount();
     await tab.delete(account);

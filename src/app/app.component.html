@@ -17,7 +17,7 @@
     <div class="lines">
       <div *ngFor="let lineNumber of lineNumbers">{{ lineNumber }}</div>
     </div>
-    <textarea *ngIf="selectedTab" [(ngModel)]="selectedTab.content" (keyup)="onChangeContent(selectedTab)" (scroll)="onScrollContent()"></textarea>
+    <textarea *ngIf="selectedTab" [(ngModel)]="selectedTab.content" (keyup)="onChangeContent(selectedTab)" (scroll)="onScrollContent()" (keydown.Tab)="onKeydown($event)"></textarea>
   </div>
   <div class="status-bar">
     <div>
