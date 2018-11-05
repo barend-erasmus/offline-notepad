@@ -59,16 +59,21 @@ export class AppComponent implements OnInit {
     (window as any).gtag('event', 'sign_out');
   }
 
-  public onKeydown(event) {
+  public onKeydown(event: KeyboardEvent): void {
     event.preventDefault();
 
     const textAreaElement: HTMLTextAreaElement = this.elementRef.nativeElement.querySelector('textarea');
+
     const text: string = textAreaElement.value;
     const start: number = textAreaElement.selectionStart;
     const end: number = textAreaElement.selectionEnd;
-    const tabbedText: string = text.substring(0, start) + '\t' + text.substring(end);
+
+    const tabbedText = `${text.substring(0, start)}\t${text.substring(end)}`;
+
     textAreaElement.value = tabbedText;
-    textAreaElement.selectionStart = textAreaElement.selectionEnd = start + 1;
+
+    textAreaElement.selectionStart = start + 1;
+    textAreaElement.selectionEnd = start + 1;
   }
 
   public onScrollContent(): void {
