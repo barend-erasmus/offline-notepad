@@ -1,4 +1,4 @@
-import { ContextMenuItem } from '@xyzblocks/ng-utils';
+import {} from '@xyzblocks/ng-utils';
 import { ITab } from '@app/interfaces/tab';
 import { ApplicationState } from '@app/application-state';
 import { DownloadHelper } from '@app/helpers/download';
@@ -6,7 +6,7 @@ import { DownloadHelper } from '@app/helpers/download';
 export class ContextMenuState {
   protected applicationState: ApplicationState = null;
 
-  public items: Array<ContextMenuItem> = [
+  public items: Array<any> = [
     {
       text: 'Download',
     },
@@ -39,7 +39,8 @@ export class ContextMenuState {
     return false;
   }
 
-  public select(item: ContextMenuItem, tab: ITab): void {
+  // public select(item: ContextMenuItem, tab: ITab): void {
+  public select(item: any, tab: ITab): void {
     this.visible = false;
 
     switch (item.text) {

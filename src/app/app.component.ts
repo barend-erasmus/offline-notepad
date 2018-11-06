@@ -62,6 +62,8 @@ export class AppComponent implements OnInit {
   public onKeydown(event: KeyboardEvent): void {
     event.preventDefault();
 
+    // TODO: Check for tab key
+
     const textAreaElement: HTMLTextAreaElement = this.elementRef.nativeElement.querySelector('textarea');
 
     const text: string = textAreaElement.value;

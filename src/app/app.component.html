@@ -18,8 +18,8 @@
   </div>
   <ng-container *ngFor="let tab of applicationState.tabs">
     <div *ngIf="tab.selected" (click)="contextMenuState.hide()" (contextmenu)="contextMenuState.show($event)" class="contents">
-      <ng-utils-context-menu *ngIf="contextMenuState.visible" (select)="contextMenuState.select($event, tab)" [items]="contextMenuState.items"
-        [x]="contextMenuState.x" [y]="contextMenuState.y"></ng-utils-context-menu>
+      <ng-components-context-menu *ngIf="contextMenuState.visible" (select)="contextMenuState.select($event, tab)" [items]="contextMenuState.items"
+        [x]="contextMenuState.x" [y]="contextMenuState.y"></ng-components-context-menu>
       <div class="lines">
         <div *ngFor="let lineNumber of tab.lineNumbers">{{ lineNumber }}</div>
       </div>
